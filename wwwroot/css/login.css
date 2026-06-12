@@ -22,6 +22,11 @@ body {
     z-index: 10;
 }
 
+.logo_senai1 {
+    width: 94%;
+    height: 40px;
+}
+
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -29,16 +34,7 @@ body {
     width: 100%;
 }
 
-.senai-logo {
-    display: block;
-}
 
-.header-logo .logo-bg {
-    fill: none;
-}
-.header-logo .logo-stripe {
-    fill: #7c8ba1;
-}
 .header-logo .logo-text {
     font-family: 'Arial Black', 'Impact', sans-serif;
     font-weight: 900;
@@ -81,13 +77,12 @@ body {
 
 .main-content {
     flex: 1;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('background.png');
-    background-size: cover;
-    background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    width: 100%;
+    height: calc(100vh - 70px);
 }
 
 .login-card {

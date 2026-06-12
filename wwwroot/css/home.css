@@ -38,17 +38,6 @@ h3,
     margin: 0 auto;
 }
 
-.senai-logo {
-    display: block;
-}
-
-.header-logo .logo-bg {
-    fill: none;
-}
-
-.header-logo .logo-stripe {
-    fill: #7c8ba1;
-}
 
 .header-logo .logo-text {
     font-family: 'Arial Black', 'Impact', sans-serif;
@@ -105,17 +94,17 @@ h3,
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
-    color: #333333; 
+    color: #333333;
 }
 
 .hero-content h1 {
     font-size: 44px;
     font-weight: 700;
-    max-width: 500px; 
+    max-width: 500px;
     line-height: 1.2;
     margin-bottom: 35px;
     /* Cor cinza/azulada semi-transparente para dar o efeito suave do texto da imagem */
-    color: rgba(43, 58, 85, 0.85); 
+    color: rgba(43, 58, 85, 0.85);
 }
 
 .btn-hero {
@@ -222,16 +211,18 @@ h3,
 .gallery-impact-section {
     padding: 80px 40px;
     background-color: #ffffff;
-   
+
+
 }
 
 .gallery-impact-container {
-    max-width: 1200px;
-    margin: 50 auto;
+    max-width: 1500px;
+    margin: 80 auto;
     display: flex;
     justify-content: space-between;
-    gap: 50px;
-   
+    align-items: center;
+    gap: 120px;
+
 
 }
 
@@ -249,6 +240,7 @@ h3,
 
 .collage-container {
     position: relative;
+    left: 300px;
     height: 380px;
     width: 100%;
 }
@@ -256,26 +248,27 @@ h3,
 .collage-photo {
     position: absolute;
     background-color: #ffffff;
-    padding: 6px;
+    padding: 5px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
     border-radius: 4px;
-    overflow: hidden;
-    height: 300px;
-    height: 300px;
+    height: 100px;
+    width: 100px;
+
 }
 
 .collage-photo img {
     display: block;
-    width: 100%;
-    height: 100%;
+    width: 300px;
+    height: 200px;
     object-fit: cover;
-    border-radius: 2px;
+    border-radius: 9px;
+    
 }
 
 .photo-graduation {
     left: 0;
     top: 0;
-    width: 250px;
+    width: 300px;
     height: 160px;
     z-index: 1;
 }
@@ -290,8 +283,8 @@ h3,
 
 .photo-collage-bl {
     left: 15px;
-    top: 180px;
-    width: 150px;
+    top: 200px;
+    width: 200px;
     height: 100px;
     z-index: 1;
 }
@@ -309,7 +302,7 @@ h3,
     top: 150px;
     width: 150px;
     height: 140px;
-    z-index: 3;
+    z-index: 10;
     padding: 10px;
 }
 
@@ -402,9 +395,17 @@ h3,
     gap: 15px;
 }
 
-.logo_senai{
-width: 75%;
-height: 75px;
+.logo_senai1 {
+    width: 113%;
+    height: 37px;
+    margin-left: -16px;
+}
+
+.logo_senai2 {
+    width: 75%;
+    height: 67px;
+    margin-left: -18px;
+
 }
 
 .info-item {
@@ -467,9 +468,15 @@ height: 75px;
         font-size: 32px;
     }
 
+    .text_image h1{
+        width: 150px;
+    }
+    
+
     .gallery-impact-container {
         flex-direction: column;
         align-items: center;
+
     }
 
     .impact-content {
@@ -497,11 +504,13 @@ height: 75px;
 
 @media (max-width: 600px) {
     .collage-container {
-        height: auto;
+        height: 300px, auto;
         display: flex;
         flex-direction: column;
         gap: 15px;
         align-items: center;
+
+
     }
 
     .collage-photo {

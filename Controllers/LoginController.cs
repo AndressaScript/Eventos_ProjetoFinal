@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Eventos_ProjetoFinal.Controllers
 {
-
-    public class HomeController : Controller
+    public class LoginController : Controller
     {
         public IActionResult Index()
         {
