@@ -10,119 +10,173 @@
     <script src="~/js/home.js"></script>
 }
 
-<section class="hero-section">
-    <div class="hero-container">
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENAI - Portal de Eventos</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:wght@300;400;500;700;900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-header">
+                <svg class="senai-logo header-logo" viewBox="0 0 300 80" width="120" height="32">
+                    <rect class="logo-bg" width="300" height="80" rx="4" />
+                    <g class="logo-stripe">
+                        <rect x="12" y="14" width="30" height="6" />
+                        <rect x="12" y="25" width="30" height="6" />
+                        <rect x="12" y="36" width="30" height="6" />
+                        <rect x="12" y="47" width="30" height="6" />
+                        <rect x="12" y="58" width="30" height="6" />
+                    </g>
+                    <text x="150" y="58" class="logo-text">SENAI</text>
+                    <g class="logo-stripe">
+                        <rect x="258" y="14" width="30" height="6" />
+                        <rect x="258" y="25" width="30" height="6" />
+                        <rect x="258" y="36" width="30" height="6" />
+                        <rect x="258" y="47" width="30" height="6" />
+                        <rect x="258" y="58" width="30" height="6" />
+                    </g>
+                </svg>
+            </div>
+            <div class="header-actions">
+                <a href="#" class="header-icon"><i class="fa-regular fa-user"></i></a>
+                <a href="#" class="header-icon"><i class="fa-solid fa-right-to-bracket"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section" style="background-image: url('@Url.Content("~/img/Banner.png")');">
+        <div class="hero-bg-overlay"></div>
         <div class="hero-content">
             <h1>SENAI: Conectando Você ao Futuro. Participe de Nossos Eventos.</h1>
-            <a href="#" class="btn-agenda">Ver Agenda Completa</a>
+            <a href="#" class="btn-hero">Ver Agenda Completa</a>
         </div>
+    </section>
 
-        <div class="hero-image-wrapper">
-            <img src="../img/Banner.png" alt="Estudantes SENAI">
-        </div>
-
-    </div>
-</section>
-
-<section class="events-section">
-    <div class="container events-grid">
-
-        <div class="event-card">
-            <div class="card-img">
-                <img src="../img/Card.png" alt="Workshop">
+    <!-- Events Cards Section -->
+    <section class="events-section">
+        <div class="events-container">
+            <!-- Card 1 -->
+            <div class="event-card">
+                <div class="card-image">
+                    <img src="~/img/card_workshop.png" alt="Workshop de Robótica Industrial">
+                </div>
+                <div class="card-body">
+                    <h3>Workshop de Robótica Industrial</h3>
+                    <p class="event-date">22 de agosto de 2026 às 15h</p>
+                    <p class="event-desc">Workshop de impressão 3D e prototipagem ......</p>
+                    <button class="btn-enroll">Inscrever se</button>
+                </div>
             </div>
-
-            <div class="card-body">
-                <h3>Workshop de Robótica Industrial</h3>
-                <p class="event-date">22 de agosto de 2026 às 15h</p>
-                <p class="event-desc">Workshop de impressão 3D e prototipagem...</p>
-                <a href="#" class="btn btn-card">Inscrever-se</a>
+            <!-- Card 2 -->
+            <div class="event-card">
+                <div class="card-image">
+                    <img src="~/img/card_IOT.png" alt="Inovação em IoT">
+                </div>
+                <div class="card-body">
+                    <h3>Inovação em IoT</h3>
+                    <p class="event-date">07 Outubro de 2026 às 16h</p>
+                    <p class="event-desc">Workshop de como trabalhar com IoT dentro do mercado de trabalho</p>
+                    <button class="btn-enroll">Inscrever se</button>
+                </div>
             </div>
-        </div>
-
-        <div class="event-card">
-            <div class="card-img">
-                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80"
-                     alt="IoT">
-            </div>
-            <div class="card-body">
-                <h3>Inovação em IoT</h3>
-                <p class="event-date">07 Outubro de 2026 às 16h</p>
-                <p class="event-desc">Workshop de como trabalhar com IoT dentro do mercado de Trabalho</p>
-                <a href="#" class="btn btn-card">Inscrever-se</a>
-            </div>a
-        </div>
-
-        <div class="event-card">
-            <div class="card-img">
-                <img src="https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=400&q=80"
-                     alt="IA">
-            </div>
-            <div class="card-body">
-                <h3>Palestra de como a IA pode ser Aliada</h3>
-                <p class="event-date">15 de Novembro de 2026 às 19h</p>
-                <p class="event-desc">Palestra abordando os impactos positivos da IA no dia a dia de um DEV</p>
-                <a href="#" class="btn btn-card">Inscrever-se</a>
+            <!-- Card 3 -->
+            <div class="event-card">
+                <div class="card-image">
+                    <img src="~/img/card_palestra.png" alt="Palestra de como a IA pode ser Aliada">
+                </div>
+                <div class="card-body">
+                    <h3>Palestra de como a IA pode ser Aliada</h3>
+                    <p class="event-date">15 de Novembro de 2026 às 19h</p>
+                    <p class="event-desc">Palestra abordando os impactos positivos da ia no dia a dia de um dev</p>
+                    <button class="btn-enroll">Inscrever se</button>
+                </div>
             </div>
         </div>
+    </section>
 
-    </div>
-</section>
-
-<main class="container main-content">
-
-    <section class="gallery-section">
-        <h2>Fotografias de Eventos Anteriores</h2>
-        <div class="photo-collage">
-            <div class="photo-item large"><img
-                src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=500&q=80"
-                alt="Formatura"></div>
-                <div class="photo-item"><img
-                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=300&q=80"
-                    alt="Estudantes trabalhando"></div>
-                    <div class="photo-item"><img
-                        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=300&q=80"
-                        alt="Reunião"></div>
-                        <div class="photo-item"><img
-                            src="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=300&q=80"
-                            alt="Apresentação"></div>
-                        </div>
-                    </section>
-
-                    <aside class="impacts-section">
-                        <div class="section-title-line"></div>
-                        <h2>Nossos Impactos</h2>
-                        <p>Milhares de profissionais qualificados e ......</p>
-                    </aside>
-
-                </main>
-
-                <section class="container calendar-section">
-                    <div class="section-title-line"></div>
-                    <h2>Próximas Datas Importantes</h2>
-                </section>
-
-                <footer class="main-footer">
-                    <div class="container footer-grid">
-                        <div class="footer-logo">SENAI</div>
-
-                        <div class="footer-contact">
-                            <p><i class="fa-solid fa-phone"></i> (11) 8754-8291</p>
-                            <p><i class="fa-solid fa-envelope"></i> senai@email.com</p>
-                            <p><i class="fa-solid fa-globe"></i> www.aluno.senai.br</p>
-                        </div>
-
-                        <div class="footer-address">
-                            <p><i class="fa-solid fa-location-dot"></i> Rua Niterói - 180</p>
-                            <p>Centro, São Caetano do Sul - SP</p>
-                            <p>CEP: 09510-200</p>
-                        </div>
-
-                        <div class="footer-links">
-                            <a href="#">Política de Privacidade</a>
-                            <a href="#">Perguntas Frequentes</a>
-                            <a href="#">Centro de Eventos</a>
-                        </div>
+    <!-- Gallery and Impact Section -->
+    <section class="gallery-impact-section">
+        <div class="gallery-impact-container">
+            <!-- Left Side: Collage -->
+            <div class="gallery-collage">
+                <h2 class="gallery-title">Fotografias de Eventos Anteriores</h2>
+                <div class="collage-container">
+                    <div class="collage-photo photo-graduation">
+                        <img src="~/img/galeria_eventos_1.png" alt="Formatura">
                     </div>
-                </footer>
+                    <div class="collage-photo photo-table-robot">
+                        <img src="~/img/galeria_eventos_2.png" alt="Trabalho em grupo com robô">
+                    </div>
+                    <div class="collage-photo photo-collage-bl">
+                        <img src="~/img/galeria_eventos_3.png" alt="Estudantes">
+                    </div>
+                    <div class="collage-photo photo-collage-bm">
+                        <img src="~/img/galeria_eventos_4.png" alt="Estudantes em laboratório">
+                    </div>
+                    <div class="collage-photo photo-collage-br">
+                        <img src="~/img/galeria_eventos_5.png" alt="Apresentação/Palestra">
+                    </div>
+                </div>
+            </div>
+            <!-- Right Side: Impact -->
+            <div class="impact-content">
+                <div class="impact-header">
+                    <div class="impact-decoration">
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <h2>Nossos Impactos</h2>
+                </div>
+                <p class="impact-text">Há mais de 80 anos, o SENAI é o principal motor de transformação da indústria
+                    brasileira, conectando o talento de jovens e adultos às reais demandas do mercado de trabalho. Com
+                    uma infraestrutura de ponta e cursos totalmente alinhados às inovações tecnológicas, a instituição
+                    vai muito além da sala de aula: ela molda carreiras de sucesso e eleva a produtividade das empresas!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="logo_senai">
+            </div>
+            <div class="footer-info">
+                <div class="info-item"><i class="fa-solid fa-phone"></i><span>(11)3551-8291</span></div>
+                <div class="info-item"><i class="fa-solid fa-envelope"></i><span>senai@email.com</span></div>
+                <div class="info-item"><i class="fa-solid fa-globe"></i><span>www.aluno.senai.br</span></div>
+            </div>
+            <div class="footer-address">
+                <div class="info-item alignment-start">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Rua Niterói, 180<br>centro, são caetano do sul - SP<br>cep: 09510-200</span>
+                </div>
+            </div>
+            <div class="footer-links">
+                <a>Política de Privacidade</a>
+                <a>Centro de Eventos</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
+
+

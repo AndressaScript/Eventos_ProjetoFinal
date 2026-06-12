@@ -8,13 +8,14 @@ build_property.ProjectTypeGuids =
 build_property.InvariantGlobalization = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EntryPointFilePath = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Eventos_ProjetoFinal
 build_property.RootNamespace = Eventos_ProjetoFinal
 build_property.ProjectDir = C:\Users\49867204816\Desktop\Eventos_ProjetoFinal\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
-build_property.RazorLangVersion = 9.0
+build_property.RazorLangVersion = 10.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = C:\Users\49867204816\Desktop\Eventos_ProjetoFinal
@@ -24,6 +25,10 @@ build_property.EnableCodeStyleSeverity =
 
 [C:/Users/49867204816/Desktop/Eventos_ProjetoFinal/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/49867204816/Desktop/Eventos_ProjetoFinal/Views/Login/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTG9naW5cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/49867204816/Desktop/Eventos_ProjetoFinal/Views/Shared/_ValidationScriptsPartial.cshtml]

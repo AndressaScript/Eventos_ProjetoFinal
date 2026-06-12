@@ -204,4 +204,6 @@ C:\Users\49867204816\Desktop\Eventos_ProjetoFinal\bin\Debug\net10.0\runtimes\win
 C:\Users\49867204816\Desktop\Eventos_ProjetoFinal\bin\Debug\net10.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\49867204816\Desktop\Eventos_ProjetoFinal\obj\Debug\net10.0\Eventos_.B5CBD359.Up2Date
 C:\Users\49867204816\Desktop\Eventos_ProjetoFinal\obj\Debug\net10.0\Eventos_ProjetoFinal.sourcelink.json
-C:\Users\49867204816\Desktop\Eventos_ProjetoFinal\obj\Debug\net10.0\compressed\epy1rix0ex-{0}-dh0ivyw39q-dh0ivyw39q.gz
+C:\Users\49867204816\Desktop\Eventos_ProjetoFinal\obj\Debug\net10.0\compressed\5rhzmdlcf5-{0}-5ipweew5fc-5ipweew5fc.gz
+C:\Users\49867204816\Desktop\Eventos_ProjetoFinal\obj\Debug\net10.0\compressed\epy1rix0ex-{0}-s6vbteaoqh-s6vbteaoqh.gz
+C:\Users\49867204816\Desktop\Eventos_ProjetoFinal\obj\Debug\net10.0\compressed\4xmi3gi1rk-{0}-5ipweew5fc-5ipweew5fc.gz
