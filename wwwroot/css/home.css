@@ -72,6 +72,7 @@ h3,
     background-position: center;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 50px;
 
 
@@ -234,8 +235,13 @@ h3,
 .gallery-title {
     font-size: 28px;
     color: #1a202c;
-    margin-bottom: 40px;
+    margin-bottom: 90px;
     font-weight: 700;
+    display: flex;
+    justify-content: flex-end;
+  
+
+ 
 }
 
 .collage-container {
@@ -243,77 +249,72 @@ h3,
     left: 300px;
     height: 380px;
     width: 100%;
+   
 }
 
 .collage-photo {
     position: absolute;
-    background-color: #ffffff;
-    padding: 5px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
     border-radius: 4px;
     height: 100px;
     width: 100px;
 
+
 }
 
 .collage-photo img {
-    display: block;
+
     width: 300px;
     height: 200px;
     object-fit: cover;
     border-radius: 9px;
+   
+  
     
 }
 
 .photo-graduation {
-    left: 0;
-    top: 0;
+    left: -100px;
+    top: -35px;
     width: 300px;
     height: 160px;
-    z-index: 1;
+   
 }
 
 .photo-table-robot {
-    left: 210px;
-    top: 35px;
+    left: 200px;
+    top: -10px;
     width: 180px;
     height: 130px;
-    z-index: 2;
+    
 }
 
 .photo-collage-bl {
-    left: 15px;
-    top: 200px;
+    left: 300px;
+    top: 120px;
     width: 200px;
     height: 100px;
-    z-index: 1;
+    
 }
 
 .photo-collage-bm {
-    left: 180px;
-    top: 180px;
+    left: 110px;
+    top: 160px;
     width: 100px;
     height: 100px;
-    z-index: 1;
+    z-index: 9;
 }
 
 .photo-collage-br {
-    left: 260px;
-    top: 150px;
+    left: -110px;
+    top: 120px;
     width: 150px;
     height: 140px;
-    z-index: 10;
-    padding: 10px;
+    z-index: 9;
+    padding: 5px;
 }
 
-.gallery-collage::after {
-    content: '';
-    display: block;
-    width: 80px;
-    height: 4px;
-    background-color: #E31C25;
-    margin-top: 40px;
-}
+
 
 .impact-content {
     width: 35%;
@@ -324,7 +325,7 @@ h3,
 }
 
 .impact-header {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .impact-decoration {

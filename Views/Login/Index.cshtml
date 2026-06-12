@@ -26,7 +26,9 @@
     <header class="header">
         <div class="header-container">
             <div>
+                <a  asp-controller="Home" asp-action="Index">
                 <img class="logo_senai1" src="/img/Senai_logo_footer.png" />
+                </a>
             </div>
             <div class="header-actions">
                 <a href="#" class="header-icon"><i class="fa-solid fa-user-lock"></i></a>
@@ -36,6 +38,7 @@
     </header>
 
     <main class="main-content">
+        <img class="bg-image" src="~/img/Banner_background.png" alt="Background">
         <div class="login-card">
             <div>
                 <img class="logo_senai1" src="~/img/Senai_logo_preto.png" /> 
@@ -45,7 +48,7 @@
             
             <form class="login-form">
                 <div class="input-group">
-                    <input type="text" placeholder="E-mail ou CPF" required>
+                    <input type="text" placeholder="E-mail" required>
                 </div>
                 <div class="input-group">
                     <input type="password" placeholder="Senha" required>
