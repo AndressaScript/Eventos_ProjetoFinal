@@ -1,0 +1,277 @@
+:root {
+    --bg-dark: #070b19;
+    --primary-blue: #0052ff;
+    --primary-purple: #9d4edd;
+    --gradient-primary: linear-gradient(135deg, #0052ff 0%, #9d4edd 100%);
+    --text-light: #ffffff;
+    --text-muted: #94a3b8;
+    --border-glow: rgba(255, 255, 255, 0.08);
+    --font-main: 'Roboto', sans-serif;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Reset */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    height: 100vh;
+    overflow: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+/* Header Styles (Consistent with Portal) */
+.header-login {
+    background-color: rgba(7, 11, 25, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-glow);
+    height: 80px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.logo-senai {
+    height: 35px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.header-icon {
+    color: var(--text-muted);
+    font-size: 1.3rem;
+    transition: var(--transition-smooth);
+}
+
+.header-icon:hover {
+    color: var(--text-light);
+    transform: scale(1.1);
+}
+
+/* Main Content & Background */
+.login-main-content {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px; /* Offset for header */
+    
+    /* Background image with deep blue/dark overlay */
+    background-image: url('../img/fundo_login.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Login Card - Glassmorphism */
+.login-card-new {
+    background: rgba(10, 17, 40, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glow);
+    border-radius: 24px;
+    padding: 3.5rem 3rem;
+    width: 100%;
+    max-width: 760px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 
+                inset 0 0 20px rgba(255, 255, 255, 0.02);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    transition: var(--transition-smooth);
+}
+
+.login-card-new:hover {
+    border-color: rgba(0, 82, 255, 0.2);
+    box-shadow: 0 25px 60px rgba(0, 82, 255, 0.15),
+                0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.card-logo-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.logo-senai-card {
+    height: 45px; /* Altura ajustada para destacar no card */
+    object-fit: contain;
+}
+
+.login-card-new h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.login-card-new .subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Form Styles */
+.login-form-new {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Inputs with Icons */
+.input-group-icon {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1.25rem;
+}
+
+.input-group-icon .field-icon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffffff;
+    font-size: 1.1rem;
+    transition: var(--transition-smooth);
+    pointer-events: none;
+}
+
+.input-group-icon input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3.25rem; /* Espaço na esquerda para o ícone */
+    font-size: 0.95rem;
+    color: var(--text-light);
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.input-group-icon input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* Focus States */
+.input-group-icon input:focus {
+    border-color: var(--primary-blue);
+    background-color: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 15px rgba(0, 82, 255, 0.25);
+}
+
+.input-group-icon input:focus + .field-icon {
+    color: var(--primary-blue);
+}
+
+/* Forgot Password */
+.forgot-password-link {
+    text-align: right;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.forgot-password-link a {
+    color: var(--primary-blue);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.forgot-password-link a:hover {
+    color: var(--primary-purple);
+    text-decoration: underline;
+}
+
+/* Submit Button */
+.btn-submit-gradient {
+    background: var(--gradient-primary);
+    color: var(--text-light);
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(0, 82, 255, 0.3);
+}
+
+.btn-submit-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 82, 255, 0.45);
+}
+
+.btn-submit-gradient:active {
+    transform: translateY(0);
+}
+
+/* Card Footer */
+.card-footer-new {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.card-footer-new a {
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+.card-footer-new a:hover {
+    color: var(--primary-purple);
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+    .header-container {
+        padding: 0 1.5rem;
+    }
+    
+    .login-card-new {
+        padding: 2.5rem 1.5rem;
+        margin: 0 1rem;
+        border-radius: 20px;
+    }
+    
+    .login-card-new h2 {
+        font-size: 1.4rem;
+    }
+    
+    .login-card-new .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+    }
+}

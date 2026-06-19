@@ -1,0 +1,142 @@
+/* Sidebar Administrativa */
+.sidebar-new {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    background-color: #070b19;
+    color: #ffffff;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    position: fixed;
+    top: 80px;
+    bottom: 0;
+    left: 0;
+    padding-top: 2rem;
+    z-index: 90;
+}
+
+/* Menu */
+.menu-new {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+}
+
+.menu-item-new {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.menu-item-new i {
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.menu-item-new:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.menu-item-new.active {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+}
+
+.menu-item-new.highlight-menu {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+}
+
+.menu-item-new.highlight-menu:hover {
+    color: #ffffff;
+    background-color: rgba(157, 78, 221, 0.1);
+}
+
+.menu-item-new.active.pink-active {
+    color: #d946ef !important;
+    background-color: rgba(217, 70, 239, 0.05);
+    border-left: 3px solid #d946ef;
+    border-radius: 0 10px 10px 0;
+}
+
+/* =================================================================
+   CARDS DE ESTATÍSTICAS (RODAPÉ DA SIDEBAR - FIEL À IMAGEM 2)
+   ================================================================= */
+.sidebar-stats-section {
+    padding: 2rem 1.5rem;
+    margin-top: auto; /* Empurra os cards para a base */
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-card-aside {
+    background: rgba(12, 19, 44, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.card-blue-glow {
+    border: 1px solid rgba(0, 82, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 82, 255, 0.08);
+}
+
+.card-purple-glow {
+    border: 1px solid rgba(157, 78, 221, 0.3);
+    box-shadow: 0 0 15px rgba(157, 78, 221, 0.08);
+}
+
+.stat-card-icon {
+    font-size: 1.4rem;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-blue-glow .stat-card-icon {
+    background-color: rgba(0, 82, 255, 0.1);
+    color: #0052ff;
+}
+
+.card-purple-glow .stat-card-icon {
+    background-color: rgba(157, 78, 221, 0.1);
+    color: #9d4edd;
+}
+
+.stat-card-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-card-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.stat-card-value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    margin-top: 2px;
+}

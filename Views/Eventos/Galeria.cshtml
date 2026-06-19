@@ -1,0 +1,303 @@
+@model IEnumerable<Eventos_ProjetoFinal.Models.Eventos>
+@{
+    ViewData["Title"] = "Galeria de Eventos";
+    // Define se o usuário logado é Admin
+    bool isAdmin = Context.Session.GetString("Role") == "Admin";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/padrao.css" />
+    <link rel="stylesheet" href="~/css/header.css" />
+    <link rel="stylesheet" href="~/css/aside.css" />
+    <link rel="stylesheet" href="~/css/listaEventos.css" />
+    @if (!isAdmin)
+    {
+        <!-- Se for Aluno/Visitante, carrega o CSS do Portal Público -->
+        <link rel="stylesheet" href="~/css/home.css" />
+    }
+}
+
+@if (isAdmin)
+{
+    <!-- =================================================================
+         VISÃO DO ADMINISTRADOR (Com Sidebar e Layout do Painel)
+         ================================================================= -->
+    
+    <!-- Topbar Administrativa -->
+    <header class="admin-topbar-new">
+        <div class="logo-senai-admin">
+            <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="logo-img">
+        </div>
+        <div class="admin-profile-new">
+            <div class="profile-avatar"><i class="fa-solid fa-circle-user"></i></div>
+            <span class="profile-name">Admin</span>
+        </div>
+    </header>
+
+    <div class="admin-dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar-new">
+            <nav class="menu-new">
+                <a asp-controller="Eventos" asp-action="Index" class="menu-item-new">
+                    <i class="fa-solid fa-table-cells-large"></i> Visão Geral
+                </a>
+                <a asp-controller="Eventos" asp-action="Cadastrar" class="menu-item-new highlight-menu">
+                    <i class="fa-solid fa-calendar-plus"></i> Cadastrar Evento
+                </a>
+                <!-- MENU ATIVO CORRIGIDO AQUI (pink-active) -->
+                <a asp-controller="Eventos" asp-action="Galeria" class="menu-item-new active pink-active">
+                    <i class="fa-regular fa-image"></i> Galeria de Eventos
+                </a>
+                <a href="#" class="menu-item-new">
+                    <i class="fa-solid fa-gear"></i> Configurações
+                </a>
+            </nav>
+            
+            <!-- Cards de Estatísticas na base da Sidebar (Cálculo dinâmico) -->
+            <div class="sidebar-stats-section">
+                <div class="stat-card-aside card-blue-glow">
+                    <div class="stat-card-icon"><i class="fa-regular fa-calendar-check"></i></div>
+                    <div class="stat-card-info">
+                        <span class="stat-card-label">Eventos Ativos:</span>
+                        <span class="stat-card-value">@Model.Count(e => e.StatusEvento == "Ativo")</span>
+                    </div>
+                </div>
+
+                <div class="stat-card-aside card-purple-glow">
+                    <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
+                    <div class="stat-card-info">
+                        <span class="stat-card-label">Novos Palestrantes:</span>
+                        <span class="stat-card-value">@Model.Select(e => e.NomePalestrante).Distinct().Count()</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main-content">
+            <div class="content-header-new">
+                <div class="breadcrumb-new">Início > <span>Galeria de Eventos</span></div>
+                <div class="title-row-new">
+                    <div class="title-block-new">
+                        <h1 class="admin-page-title">Galeria de Eventos</h1>
+                        <span class="title-gradient-line"></span>
+                    </div>
+                    <a href="#" class="btn-new-event-glow">+ Novo Álbum de Fotos</a>
+                </div>
+                <p class="admin-subtitle">Confira os momentos que conectam conhecimento e oportunidades.</p>
+            </div>
+
+            <!-- Grid da Galeria (3 Colunas) -->
+            <div class="gallery-grid-admin">
+                @if (Model != null && Model.Any())
+                {
+                    bool isFirst = true;
+                    @foreach (var item in Model)
+                    {
+                        string albumImage = "galeria_eventos_1.png";
+                        if (item.NomeEvento.Contains("Mulher", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Mulheres", StringComparison.OrdinalIgnoreCase))
+                        {
+                            albumImage = "galeria_eventos_3.png";
+                        }
+                        else if (item.NomeEvento.Contains("Hall", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Jhon", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("FIESP", StringComparison.OrdinalIgnoreCase))
+                        {
+                            albumImage = "galeria_eventos_2.png";
+                        }
+                        else if (item.NomeEvento.Contains("Rosa", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Outubro", StringComparison.OrdinalIgnoreCase))
+                        {
+                            albumImage = "galeria_eventos_1.png";
+                        }
+                        
+                        string highlightClass = isFirst ? "highlight-album-card" : "";
+                        isFirst = false;
+                        
+                        <div class="album-card @highlightClass">
+                            <div class="album-img-wrapper">
+                                <img src="~/img/@albumImage" alt="@item.NomeEvento" />
+                            </div>
+                            <div class="album-body">
+                                <h3>@item.NomeEvento</h3>
+                                <div class="album-meta-list">
+                                    <div class="album-meta-item">
+                                        <i class="fa-regular fa-calendar"></i>
+                                        <span>Realizado em: @item.DataEvento.ToString("dd/MM/yyyy")</span>
+                                    </div>
+                                    <div class="album-meta-item">
+                                        <i class="fa-regular fa-user"></i>
+                                        <span>Palestrante: @item.NomePalestrante</span>
+                                    </div>
+                                </div>
+                                <div class="album-action-row">
+                                    <a href="#" class="btn-view-photos">Ver Fotos <i class="fa-solid fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="no-albums-admin" style="color: white;">Nenhum evento realizado (passado) encontrado na galeria.</p>
+                }
+            </div>
+
+            <!-- Botão Voltar -->
+            <div class="admin-actions-footer">
+                <a asp-controller="Home" asp-action="Index" class="btn-admin-back"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            </div>
+        </main>
+    </div>
+}
+else
+{
+    <!-- =================================================================
+         VISÃO DO ALUNO / PÚBLICA (Com Cabeçalho do Portal, Sem Sidebar)
+         ================================================================= -->
+    
+    <!-- Header do Portal (Público) -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-container">
+                <a asp-controller="Home" asp-action="Index">
+                    <img class="logo-senai" src="~/img/Senai_logo_footer.png" alt="Logo SENAI">
+                </a>
+            </div>
+            <nav class="nav-menu">
+                <a href="/Home#eventos">Eventos</a>
+                <a href="/Home#sobre">Sobre o Centro</a>
+                <a href="/Home#impactos">Impactos</a>
+                <a href="/Home#galeria" class="active">Galeria</a>
+                <a href="/Home#contato">Contato</a>
+            </nav>
+            <div class="header-actions">
+                @if (Context.Session.GetString("UsuarioId") != null)
+                {
+                    <span class="user-email">@Context.Session.GetString("Email")</span>
+                    <a asp-controller="Login" asp-action="Logout" class="btn-logout" title="Sair"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+                }
+                else
+                {
+                    <a asp-controller="Login" asp-action="Index" class="btn-login" title="Login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                }
+                <a href="/Home#eventos" class="btn-agenda-header"><i class="fa-regular fa-calendar-days"></i> Agenda de Eventos</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal Centralizado e Expandido -->
+    <main class="public-gallery-main" style="padding-top: 130px; padding-bottom: 100px; background-color: #050814; min-height: 100vh;">
+        <div class="public-gallery-container" style="max-width: 1300px; margin: 0 auto; padding: 0 2rem; display: flex; flex-direction: column; gap: 3rem;">
+            
+            <div class="content-header-new">
+                <div class="breadcrumb-new">Início > <span style="color: #d946ef; font-weight: bold;">Galeria de Eventos</span></div>
+                <div class="title-row-new" style="margin-bottom: 0.5rem;">
+                    <div class="title-block-new">
+                        <h1 class="admin-page-title">Galeria de Eventos</h1>
+                        <span class="title-gradient-line" style="background: linear-gradient(90deg, #0052ff 0%, #d946ef 100%); width: 120px;"></span>
+                    </div>
+                </div>
+                <p class="admin-subtitle">Confira os momentos que conectam conhecimento e oportunidades.</p>
+            </div>
+
+            <!-- Grid da Galeria (Mesmo Grid de 3 Colunas) -->
+            <div class="gallery-grid-admin">
+                @if (Model != null && Model.Any())
+                {
+                    bool isFirst = true;
+                    @foreach (var item in Model)
+                    {
+                        string albumImage = "galeria_eventos_1.png";
+                        if (item.NomeEvento.Contains("Mulher", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Mulheres", StringComparison.OrdinalIgnoreCase))
+                        {
+                            albumImage = "galeria_eventos_3.png";
+                        }
+                        else if (item.NomeEvento.Contains("Hall", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Jhon", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("FIESP", StringComparison.OrdinalIgnoreCase))
+                        {
+                            albumImage = "galeria_eventos_2.png";
+                        }
+                        else if (item.NomeEvento.Contains("Rosa", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Outubro", StringComparison.OrdinalIgnoreCase))
+                        {
+                            albumImage = "galeria_eventos_1.png";
+                        }
+                        
+                        string highlightClass = isFirst ? "highlight-album-card" : "";
+                        isFirst = false;
+                        
+                        <div class="album-card @highlightClass">
+                            <div class="album-img-wrapper">
+                                <img src="~/img/@albumImage" alt="@item.NomeEvento" />
+                            </div>
+                            <div class="album-body">
+                                                           <h3>@item.NomeEvento</h3>
+                                <div class="album-meta-list">
+                                    <div class="album-meta-item">
+                                        <i class="fa-regular fa-calendar"></i>
+                                        <span>Realizado em: @item.DataEvento.ToString("dd/MM/yyyy")</span>
+                                    </div>
+                                    <div class="album-meta-item">
+                                        <i class="fa-regular fa-user"></i>
+                                        <span>Palestrante: @item.NomePalestrante</span>
+                                    </div>
+                                </div>
+                                <div class="album-action-row">
+                                    <a href="#" class="btn-view-photos">Ver Fotos <i class="fa-solid fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="no-albums-admin" style="color: white; text-align: center;">Nenhum evento realizado (passado) encontrado na galeria.</p>
+                }
+            </div>
+
+            <!-- Botão Voltar ao Portal -->
+            <div class="admin-actions-footer">
+                <a asp-controller="Home" asp-action="Index" class="btn-admin-back"><i class="fa-solid fa-arrow-left"></i> Voltar ao Portal</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé do Portal -->
+    <footer id="contato" class="footer-new">
+        <div class="footer-grid">
+            <div class="footer-col brand-col">
+                <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="footer-logo">
+                <p class="footer-desc">Educando hoje, transformando o amanhã.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>NAVEGAÇÃO</h3>
+                <ul>
+                    <li><a href="/Home#eventos">Eventos</a></li>
+                    <li><a href="/Home#sobre">Sobre o Centro</a></li>
+                    <li><a href="/Home#impactos">Impactos</a></li>
+                    <li><a href="/Home#galeria">Galeria</a></li>
+                    <li><a href="/Home#contato">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>CONTATO</h3>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> (11) 3551-8291</li>
+                    <li><i class="fa-solid fa-envelope"></i> senai@email.com</li>
+                    <li><i class="fa-solid fa-globe"></i> www.aluno.senai.br</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Rua Niterói, 180<br>Centro, São Caetano do Sul - SP<br>CEP: 09510-200</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>LINKS ÚTEIS</h3>
+                <ul>
+                    <li><a href="#">Política de Privacidade</a></li>
+                    <li><a href="#">Perguntas Frequentes</a></li>
+                    <li><a href="#">Centro de Eventos</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+}

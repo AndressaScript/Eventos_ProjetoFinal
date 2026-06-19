@@ -1,0 +1,146 @@
+@model IEnumerable<Eventos_ProjetoFinal.Models.Eventos>
+@{
+    ViewData["Title"] = "Gestão de Eventos";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/listaEventos.css">
+    <link rel="stylesheet" href="~/css/header.css">
+    <link rel="stylesheet" href="~/css/aside.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+}
+
+<!-- Topbar Administrativa -->
+<header class="admin-topbar-new">
+    <div class="logo-senai-admin">
+        <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="logo-img">
+    </div>
+    <div class="admin-profile-new">
+        <div class="profile-avatar"><i class="fa-solid fa-circle-user"></i></div>
+        <span class="profile-name">Admin</span>
+    </div>
+</header>
+
+<div class="admin-dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar-new">
+    <nav class="menu-new">
+        <a asp-controller="Eventos" asp-action="Index" class="menu-item-new active active pink-active">
+            <i class="fa-solid fa-table-cells-large"></i> Visão Geral
+        </a>
+        
+        <a asp-controller="Eventos" asp-action="Cadastrar" class="menu-item-new">
+            <i class="fa-solid fa-user-plus"></i> Cadastrar Evento
+        </a>
+        
+        <a asp-controller="Eventos" asp-action="Galeria" class="menu-item-new active">
+            <i class="fa-regular fa-image"></i> Galeria de Eventos
+        </a>
+    </nav>
+
+        <!-- Cards de Estatísticas dinâmicas (Base da Sidebar) -->
+        <div class="sidebar-stats-section">
+            <div class="stat-card-aside card-blue-glow">
+                <div class="stat-card-icon"><i class="fa-regular fa-calendar-check"></i></div>
+                <div class="stat-card-info">
+                    <span class="stat-card-label">Eventos Ativos:</span>
+                    <span class="stat-card-value">@Model.Count(e => e.StatusEvento == "Ativo")</span>
+                </div>
+            </div>
+
+            <div class="stat-card-aside card-purple-glow">
+                <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="stat-card-info">
+                    <span class="stat-card-label">Novos Palestrantes:</span>
+                    <span class="stat-card-value">@Model.Select(e => e.NomePalestrante).Distinct().Count()</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="admin-main-content">
+        <div class="content-header-new">
+            <div class="breadcrumb-new">Início > <span>Gestão de Eventos</span></div>
+            <div class="title-row-new">
+                <div class="title-block-new">
+                    <h1 class="admin-page-title">Gestão de Eventos</h1>
+                    <span class="title-gradient-line"></span>
+                </div>
+                <!-- Botão Novo Evento que abre a página de criação -->
+                <a asp-controller="Eventos" asp-action="Cadastrar" class="btn-new-event-glow">+ Novo Evento</a>
+            </div>
+        </div>
+
+        <!-- Tabela/Lista em Glassmorphism -->
+        <div class="admin-list-wrapper">
+            <h2 class="admin-list-title">Lista de Eventos Cadastrados</h2>
+            <div class="admin-events-list">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        // Define ícones e cores dinamicamente baseados no tema do evento
+                        string iconClass = "fa-solid fa-robot";
+                        string colorClass = "icon-blue";
+
+                        if (item.NomeEvento.Contains("IoT", StringComparison.OrdinalIgnoreCase) ||
+                            item.TipoEvento.Contains("IoT", StringComparison.OrdinalIgnoreCase))
+                        {
+                            iconClass = "fa-solid fa-wifi";
+                            colorClass = "icon-purple";
+                        }
+                        else if (item.NomeEvento.Contains("IA", StringComparison.OrdinalIgnoreCase) ||
+                                 item.NomeEvento.Contains("Inteligência", StringComparison.OrdinalIgnoreCase) ||
+                                 item.TipoEvento.Contains("IA", StringComparison.OrdinalIgnoreCase))
+                        {
+                            iconClass = "fa-solid fa-brain";
+                            colorClass = "icon-pink";
+                        }
+
+                        <div class="admin-event-row">
+                            <div class="event-icon-box @colorClass">
+                                <i class="@iconClass"></i>
+                            </div>
+
+                            <div class="event-col-title">
+                                <strong>@item.NomeEvento</strong>
+                            </div>
+                            <div class="event-col-type">@item.TipoEvento</div>
+                            <div class="event-col-date">
+                                <span>@item.DataEvento.ToString("dd/MM/yyyy")</span>
+                                <small>Às @item.HorarioEvento.ToString("HH:mm") Hrs</small>
+                            </div>
+                            <div class="event-col-speaker">@item.NomePalestrante</div>
+
+                            <div class="event-col-status">
+                                <span class="badge-status-active">@item.StatusEvento</span>
+                            </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="event-col-actions">
+                                <form asp-controller="Eventos" asp-action="Excluir" asp-route-id="@item.EventoID" method="post" style="display:inline;">
+                                    <button type="submit" class="admin-action-btn btn-delete" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </form>
+                                <a asp-controller="Eventos" asp-action="Editar" asp-route-id="@item.EventoID" class="admin-action-btn btn-edit" title="Editar">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="no-events-admin">Nenhum evento cadastrado.</p>
+                }
+            </div>
+        </div>
+
+        <!-- Botão Voltar ao Portal -->
+        <div class="admin-actions-footer">
+            <a asp-controller="Home" asp-action="Index" class="btn-admin-back"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+        </div>
+    </main>
+</div>

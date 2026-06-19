@@ -1,0 +1,65 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css">
+}
+
+@section Scripts {
+    <script src="~/js/login.js"></script>   
+}
+
+<!-- Header (Consistente com a Home) -->
+<header class="header-login">
+    <div class="header-container">
+        <div>
+            <a asp-controller="Home" asp-action="Index">
+                <img class="logo-senai" src="~/img/Senai_logo_footer.png" alt="Logo SENAI" />
+            </a>
+        </div>
+        <div class="header-actions">
+            <a href="#" class="header-icon" title="Área Restrita"></i></a>
+            <a href="#" class="header-icon" title="Menu"></i></a>
+        </div>
+    </div>
+</header>
+
+<main class="login-main-content">
+    <div class="bg-image-overlay"></div>
+    
+    <div class="login-card-new">
+        <div class="card-logo-wrapper">
+            <img class="logo-senai-card" src="~/img/Senai_logo_footer.png" alt="SENAI" /> 
+        </div>
+        <h2>Seja bem-vindo ao Portal de Eventos</h2>
+        <p class="subtitle">Entre com seus dados para continuar</p>
+        
+        <form class="login-form-new" asp-controller="Login" asp-action="Logar" method="post">
+            @if (ViewBag.Erro != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Erro
+                </div>
+            }
+            
+            <!-- Input E-mail/CPF com Ícone -->
+            <div class="input-group-icon">
+                <i class="fa-regular fa-user field-icon"></i>
+                <input type="text" name="email" placeholder="exemplo@gmail.com" required>
+            </div>
+            
+            <!-- Input Senha com Ícone -->
+            <div class="input-group-icon">
+                <i class="fa-solid fa-lock field-icon"></i>
+                <input type="password" name="senha" placeholder="****" required>
+            </div>
+            
+            <div class="forgot-password-link">
+                <a href="#">Esqueceu sua senha?</a>
+            </div>
+            
+            <button type="submit" class="btn-submit-gradient">ENTRAR</button>
+        </form>
+    </div>
+</main>

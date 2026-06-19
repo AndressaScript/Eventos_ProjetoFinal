@@ -1,0 +1,48 @@
+[33mcommit d9eb6d293cd486f1af12aa9c9431673de2fb8878[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: THAYNA CORREIA DOS SANTOS <49867204816@info.local>
+Date:   Fri Jun 19 13:18:30 2026 -0300
+
+    telas de layout
+
+ Contexts/BdDbContext.cs                            |    2 [32m+[m
+ Models/Galeria.cs                                  |   12 [32m+[m
+ Views/Eventos/Index.cshtml                         |    4 [32m+[m[31m-[m
+ Views/Home/Index.cshtml                            |  415 [32m++++[m[31m---[m
+ Views/Login/Index.cshtml                           |   46 [32m+[m[31m-[m
+ appsettings.json                                   |    3 [32m+[m
+ bin/Debug/net10.0/Eventos_ProjetoFinal.dll         |  Bin [31m275456[m -> [32m294912[m bytes
+ bin/Debug/net10.0/Eventos_ProjetoFinal.exe         |  Bin [31m162816[m -> [32m162816[m bytes
+ bin/Debug/net10.0/Eventos_ProjetoFinal.pdb         |  Bin [31m84036[m -> [32m85588[m bytes
+ ...tos_ProjetoFinal.staticwebassets.endpoints.json |    2 [32m+[m[31m-[m
+ ...entos_ProjetoFinal.staticwebassets.runtime.json |    2 [32m+[m[31m-[m
+ bin/Debug/net10.0/appsettings.json                 |    3 [32m+[m
+ .../net10.0/Eventos_ProjetoFinal.AssemblyInfo.cs   |    2 [32m+[m[31m-[m
+ .../Eventos_ProjetoFinal.AssemblyInfoInputs.cache  |    2 [32m+[m[31m-[m
+ ...tos_ProjetoFinal.csproj.CoreCompileInputs.cache |    2 [32m+[m[31m-[m
+ ...ventos_ProjetoFinal.csproj.FileListAbsolute.txt |    5 [32m+[m[31m-[m
+ obj/Debug/net10.0/Eventos_ProjetoFinal.dll         |  Bin [31m275456[m -> [32m294912[m bytes
+ obj/Debug/net10.0/Eventos_ProjetoFinal.pdb         |  Bin [31m84036[m -> [32m85588[m bytes
+ .../net10.0/Eventos_ProjetoFinal.sourcelink.json   |    2 [32m+[m[31m-[m
+ obj/Debug/net10.0/apphost.exe                      |  Bin [31m162816[m -> [32m162816[m bytes
+ .../5rhzmdlcf5-{0}-awy39hhxwn-awy39hhxwn.gz        |  Bin [31m0[m -> [32m1737[m bytes
+ .../5rhzmdlcf5-{0}-cxvmuf7bbp-cxvmuf7bbp.gz        |  Bin [31m1207[m -> [32m0[m bytes
+ .../epy1rix0ex-{0}-i9q0hlxcka-i9q0hlxcka.gz        |  Bin [31m0[m -> [32m4182[m bytes
+ .../epy1rix0ex-{0}-rrxbhzhyum-rrxbhzhyum.gz        |  Bin [31m2031[m -> [32m0[m bytes
+ .../epy1rix0ex-{0}-s300egaqep-s300egaqep.gz        |  Bin [31m0[m -> [32m4170[m bytes
+ obj/Debug/net10.0/rbcswa.dswa.cache.json           |    2 [32m+[m[31m-[m
+ obj/Debug/net10.0/ref/Eventos_ProjetoFinal.dll     |  Bin [31m51200[m -> [32m51200[m bytes
+ obj/Debug/net10.0/refint/Eventos_ProjetoFinal.dll  |  Bin [31m51200[m -> [32m51200[m bytes
+ obj/Debug/net10.0/rjimswa.dswa.cache.json          |    2 [32m+[m[31m-[m
+ obj/Debug/net10.0/rjsmcshtml.dswa.cache.json       |    2 [32m+[m[31m-[m
+ obj/Debug/net10.0/rjsmrazor.dswa.cache.json        |    2 [32m+[m[31m-[m
+ obj/Debug/net10.0/rpswa.dswa.cache.json            |    2 [32m+[m[31m-[m
+ .../net10.0/staticwebassets.build.endpoints.json   |    2 [32m+[m[31m-[m
+ obj/Debug/net10.0/staticwebassets.build.json       |    2 [32m+[m[31m-[m
+ obj/Debug/net10.0/staticwebassets.build.json.cache |    2 [32m+[m[31m-[m
+ obj/Debug/net10.0/staticwebassets.development.json |    2 [32m+[m[31m-[m
+ wwwroot/css/home.css                               | 1239 [32m+++++++++++++++[m[31m-----[m
+ wwwroot/css/login.css                              |  311 [32m++[m[31m---[m
+ wwwroot/img/Banner2.png                            |  Bin [31m0[m -> [32m1621734[m bytes
+ wwwroot/img/cabecalho-3SENAI.png                   |  Bin [31m0[m -> [32m36801[m bytes
+ wwwroot/img/fundo_login.png                        |  Bin [31m0[m -> [32m1274040[m bytes
+ 41 files changed, 1454 insertions(+), 616 deletions(-)

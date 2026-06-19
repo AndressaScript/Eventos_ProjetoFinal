@@ -1,0 +1,241 @@
+@model Eventos_ProjetoFinal.Models.Eventos
+@{
+    ViewData["Title"] = "Criação de Novo Evento";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/padrao.css" />
+    <link rel="stylesheet" href="~/css/header.css" />
+    <link rel="stylesheet" href="~/css/aside.css" />
+    <link rel="stylesheet" href="~/css/cadastroEvento.css" />
+}
+
+<!-- Topbar Administrativa (Consistente com o Painel) -->
+<header class="admin-topbar-new">
+    <div class="logo-senai-admin">
+        <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="logo-img">
+    </div>
+    <div class="admin-profile-new">
+        <div class="profile-avatar"><i class="fa-solid fa-circle-user"></i></div>
+        <span class="profile-name">Admin</span>
+    </div>
+</header>
+
+<div class="admin-dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar-new">
+        <nav class="menu-new">
+            <a asp-controller="Eventos" asp-action="Index" class="menu-item-new">
+                <i class="fa-solid fa-table-cells-large"></i> Visão Geral
+            </a>
+            <a asp-controller="Eventos" asp-action="Cadastrar" class="menu-item-new active pink-active">
+                <i class="fa-solid fa-calendar-plus"></i> Cadastrar Evento
+            </a>
+            <a asp-controller="Eventos" asp-action="Galeria" class="menu-item-new">
+                <i class="fa-regular fa-image"></i> Galeria de Eventos
+            </a>
+        </nav>
+        
+        <!-- Cards de Estatísticas na base da Sidebar (Dinamizados via ViewBag) -->
+        <div class="sidebar-stats-section">
+            <div class="stat-card-aside card-blue-glow">
+                <div class="stat-card-icon"><i class="fa-regular fa-calendar-check"></i></div>
+                <div class="stat-card-info">
+                    <span class="stat-card-label">Eventos Ativos:</span>
+                    <span class="stat-card-value">@ViewBag.EventosAtivos</span>
+                </div>
+            </div>
+
+            <div class="stat-card-aside card-purple-glow">
+                <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="stat-card-info">
+                    <span class="stat-card-label">Novos Palestrantes:</span>
+                    <span class="stat-card-value">@ViewBag.Palestrantes</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main-content">
+        <div class="content-header-new" style="margin-bottom: 2rem;">
+            <div class="breadcrumb-new">Início > Gestão de Eventos > <span style="color: #d946ef; font-weight: bold;">Novo Evento</span></div>
+        </div>
+
+        <!-- Card Branco do Formulário (Fiel à Imagem) -->
+        <div class="event-form-container">
+            <h1 class="form-main-title">Criação de Novo Evento</h1>
+            
+            <form class="event-form-new" asp-controller="Eventos" asp-action="Cadastrar" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <!-- SEÇÃO 1: Informações Básicas -->
+                <div class="form-section-new">
+                    <h2>1. Informações Básicas</h2>
+                    
+                    <div class="input-field-group">
+                        <label asp-for="NomeEvento">Título do evento:</label>
+                        <input asp-for="NomeEvento" type="text" placeholder="Insira o título aqui..." required />
+                        <span asp-validation-for="NomeEvento" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="input-field-group">
+                        <label asp-for="TipoEvento">Tipo de evento:</label>
+                        <div class="select-wrapper">
+                            <select asp-for="TipoEvento" required>
+                                <option value="Workshop">Workshop</option>
+                                <option value="Palestra">Palestra</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="TipoEvento" class="text-danger"></span>
+                    </div>
+
+                    <!-- Campos de apoio para não quebrar a inserção no Banco de Dados -->
+                    <div class="input-field-grid-2">
+                        <div class="input-field-group">
+                            <label asp-for="LocalEvento">Local do evento:</label>
+                            <input asp-for="LocalEvento" type="text" placeholder="Ex: Auditório A ou Online" required />
+                            <span asp-validation-for="LocalEvento" class="text-danger"></span>
+                        </div>
+                        <div class="input-field-group">
+                            <label asp-for="CapacidadeEvento">Capacidade máxima:</label>
+                            <input asp-for="CapacidadeEvento" type="number" placeholder="Ex: 100" required />
+                            <span asp-validation-for="CapacidadeEvento" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-field-group">
+                        <label asp-for="StatusEvento">Status do Evento:</label>
+                        <div class="select-wrapper">
+                            <select asp-for="StatusEvento" required>
+                                <option value="Ativo">Ativo</option>
+                                <option value="Inativo">Inativo</option>
+                                <option value="Pendente">Pendente</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="StatusEvento" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 2: Datas e Carga Horária -->
+                <div class="form-section-new">
+                    <h2>2. Datas e Carga Horária</h2>
+                    
+                    <div class="input-field-grid-3">
+                        <!-- Data de Início (DataEvento) -->
+                        <div class="input-field-group icon-input">
+                            <label asp-for="DataEvento">Data de Início</label>
+                            <div class="input-with-icon">
+                                <input asp-for="DataEvento" type="date" required />
+                                <i class="fa-regular fa-calendar field-icon-light"></i>
+                            </div>
+                            <span asp-validation-for="DataEvento" class="text-danger"></span>
+                        </div>
+                        
+                        <!-- Horário (HorarioEvento) -->
+                        <div class="input-field-group icon-input">
+                            <label asp-for="HorarioEvento">Horário de Início</label>
+                            <div class="input-with-icon">
+                                <input asp-for="HorarioEvento" type="datetime-local" required />
+                                <i class="fa-regular fa-clock field-icon-light"></i>
+                            </div>
+                            <span asp-validation-for="HorarioEvento" class="text-danger"></span>
+                        </div>
+                        
+                        <!-- Carga Horária -->
+                        <div class="input-field-group">
+                            <label asp-for="CargaHorariaEvento">Carga Horária</label>
+                            <input asp-for="CargaHorariaEvento" type="text" placeholder="ex. 4 horas" required />
+                            <span asp-validation-for="CargaHorariaEvento" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 3: Mídia e Descrição -->
+                <div class="form-section-new">
+                    <h2>3. Mídia e Descrição</h2>
+                    
+                    <!-- Box de Upload de Fotos -->
+                    <div class="upload-box-wrapper">
+                        <div class="upload-box-dotted">
+                            <div class="upload-icon-circle">
+                                <i class="fa-solid fa-camera"></i>
+                            </div>
+                            <span class="upload-title">Upload de Fotos</span>
+                            <span class="upload-subtitle">Arraste e solte ou clique para selecionar</span>
+                            <input type="file" id="file-upload-input" style="display: none;" />
+                        </div>
+                    </div>
+                    
+                    <!-- Textarea de Descrição (Representativa para fidelidade visual) -->
+                    <div class="input-field-group">
+                        <label>Descrição Completa</label>
+                        <textarea rows="5" placeholder="Insira os detalhes e cronograma do evento aqui..."></textarea>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 4: Palestrantes -->
+                <div class="form-section-new">
+                    <h2>4. Palestrantes</h2>
+                    
+                    <div class="speaker-actions-row" style="margin-bottom: 1.25rem;">
+                        <button type="button" class="btn-add-speaker-gradient">Adicionar Palestrante</button>
+                    </div>
+                    
+                    <!-- Input de Busca que vincula ao Palestrante no Banco -->
+                    <div class="input-field-group search-input-wrapper">
+                        <div class="input-with-icon">
+                            <input asp-for="NomePalestrante" type="text" placeholder="Busca pelo nome do palestrante..." required />
+                            <i class="fa-solid fa-magnifying-glass field-icon-light"></i>
+                        </div>
+                        <span asp-validation-for="NomePalestrante" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Ações do Formulário -->
+                <div class="form-submit-actions">
+                    <button type="submit" class="btn-save-publish-dark">Salvar e Publicar</button>
+                    <a asp-controller="Eventos" asp-action="Index" class="btn-cancel-light">Cancelar</a>
+                </div>
+
+                <!-- Cole este código no final do arquivo Cadastrar.cshtml -->
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const uploadBox = document.querySelector(".upload-box-dotted");
+            const fileInput = document.getElementById("file-upload-input");
+            const uploadTitle = document.querySelector(".upload-title");
+            const uploadSubtitle = document.querySelector(".upload-subtitle");
+            const uploadIcon = document.querySelector(".upload-icon-circle i");
+            if (uploadBox && fileInput) {
+                // Ao clicar no box pontilhado, aciona o seletor de arquivos oculto do seu PC
+                uploadBox.addEventListener("click", function() {
+                    fileInput.click();
+                });
+                // Quando o usuário seleciona um arquivo do computador
+                fileInput.addEventListener("change", function() {
+                    if (fileInput.files && fileInput.files.length > 0) {
+                        const fileName = fileInput.files[0].name;
+                        
+                        // Atualiza os textos da caixa de upload na tela
+                        uploadTitle.textContent = "Foto Selecionada!";
+                        uploadSubtitle.textContent = fileName;
+                        uploadSubtitle.style.color = "#8b5cf6"; // Cor roxa para destacar
+                        uploadSubtitle.style.fontWeight = "bold";
+                        
+                        // Altera o ícone da câmera para um check verde de sucesso
+                        if (uploadIcon) {
+                            uploadIcon.className = "fa-solid fa-circle-check";
+                            uploadIcon.parentElement.style.backgroundColor = "rgba(34, 197, 94, 0.1)";
+                            uploadIcon.parentElement.style.color = "#22c55e";
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}
+            </form>
+        </div>
+    </main>
+</div>

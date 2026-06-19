@@ -1,0 +1,285 @@
+/* =================================================================
+   LAYOUT DO PAINEL (Fundo Escuro e Container)
+   ================================================================= */
+.admin-dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #050814 !important; /* Fundo azul/preto super escuro */
+    padding-top: 80px;
+}
+
+.admin-main-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    min-height: calc(100vh - 80px);
+    background-color: #050814 !important;
+}
+
+/* Breadcrumbs e Cabeçalho */
+.breadcrumb-new {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+}
+
+.breadcrumb-new span {
+    color: #ffffff; /* Letra Branca */
+    font-weight: 500;
+}
+
+.title-row-new {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.title-block-new {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.admin-page-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #ffffff !important; /* Letra Branca */
+    line-height: 1.1;
+}
+
+.title-gradient-line {
+    height: 3px;
+    width: 120px;
+    background: linear-gradient(90deg, #0052ff 0%, #d946ef 100%);
+    border-radius: 2px;
+}
+
+/* Botão "+ Novo Evento" com contorno brilhante */
+.btn-new-event-glow {
+    background: transparent;
+    color: #ffffff !important; /* Letra Branca */
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background-image: linear-gradient(#030712, #030712), linear-gradient(135deg, #0072ff, #ff007f);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+.btn-new-event-glow:hover {
+    border-color: #d946ef;
+    box-shadow: 0 0 20px rgba(217, 70, 239, 0.35);
+    transform: translateY(-2px);
+    color: #ffffff !important;
+}
+
+/* =================================================================
+   CARD DA LISTA - GLASSMORPHISM (Fundo escuro translúcido)
+   ================================================================= */
+.admin-list-wrapper {
+    background: rgba(10, 17, 40, 0.6) !important; /* Card escuro transparente */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    width: 100%;
+}
+
+.admin-list-title {
+    color: #ffffff !important; /* Letra Branca */
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    text-align: left;
+}
+
+.admin-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* =================================================================
+   LINHAS DA LISTA DE EVENTOS (Estilo tabela arredondada)
+   ================================================================= */
+.admin-event-row {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 16px;
+    padding: 1.25rem 1.75rem;
+    display: grid;
+    grid-template-columns: 60px 2fr 1fr 1.5fr 1.25fr 1fr 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+    color: #ffffff !important; /* Letra Branca Global na linha */
+}
+
+.admin-event-row:hover {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(-2px);
+}
+
+/* Caixa de Ícone Dinâmico */
+.event-icon-box {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.event-icon-box.icon-blue {
+    background-color: rgba(0, 82, 255, 0.15);
+    color: #0052ff;
+    border: 1px solid rgba(0, 82, 255, 0.3);
+}
+
+.event-icon-box.icon-purple {
+    background-color: rgba(217, 70, 239, 0.15);
+    color: #d946ef;
+    border: 1px solid rgba(217, 70, 239, 0.3);
+}
+
+.event-icon-box.icon-pink {
+    background-color: rgba(236, 72, 153, 0.15);
+    color: #ec4899;
+    border: 1px solid rgba(236, 72, 153, 0.3);
+}
+
+/* Textos das colunas (Garantia de cor branca e clara) */
+.event-col-title {
+    font-size: 1.05rem;
+    color: #ffffff !important; /* Letra Branca */
+    font-weight: 600;
+}
+
+.event-col-type {
+    color: #cbd5e1 !important; /* Letra Cinza Claro */
+    font-size: 0.95rem;
+}
+
+.event-col-date {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+    color: #ffffff !important; /* Letra Branca */
+}
+
+.event-col-date small {
+    color: #94a3b8 !important; /* Horário em cinza claro */
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+.event-col-speaker {
+    color: #cbd5e1 !important; /* Letra Cinza Claro */
+    font-size: 0.95rem;
+}
+
+/* Badge de Status Verde */
+.badge-status-active {
+    background-color: rgba(34, 197, 94, 0.15) !important;
+    color: #4ade80 !important; /* Verde brilhante */
+    border: 1px solid rgba(34, 197, 94, 0.3) !important;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+/* Botões de Ação (Editar / Excluir) */
+.event-col-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.admin-action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-action-btn.btn-delete {
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171; /* Vermelho claro */
+}
+
+.admin-action-btn.btn-delete:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.admin-action-btn.btn-edit {
+    border: 1px solid rgba(217, 70, 239, 0.3);
+    color: #f472b6; /* Rosa claro */
+}
+
+.admin-action-btn.btn-edit:hover {
+    background-color: rgba(217, 70, 239, 0.15);
+    border-color: #d946ef;
+    color: #d946ef;
+}
+
+/* Botão Voltar do rodapé */
+.admin-actions-footer {
+    margin-top: 1.5rem;
+}
+
+.btn-admin-back {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff !important; /* Letra Branca */
+    font-weight: 600;
+    padding: 0.75rem 1.75rem;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background-image: linear-gradient(#030712, #030712), linear-gradient(135deg, #0072ff, #ff007f);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+.btn-admin-back:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateX(-3px);
+}
+
+.no-events-admin {
+    text-align: center;
+    color: #94a3b8;
+    padding: 3rem 0;
+    font-size: 1.1rem;
+}
