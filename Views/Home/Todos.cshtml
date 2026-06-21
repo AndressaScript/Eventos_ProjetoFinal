@@ -1,0 +1,275 @@
+@model IEnumerable<Eventos_ProjetoFinal.Models.Eventos>
+@{
+    ViewData["Title"] = "Todos os Eventos - SENAI";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css">
+}
+@section Scripts {
+    <script src="~/js/home.js"></script>
+}
+<!-- Header -->
+<header class="header">
+    <div class="header-container">
+        <div class="logo-container">
+            <a asp-controller="Home" asp-action="Index">
+                <img class="logo-senai" src="~/img/Senai_logo_footer.png" alt="Logo SENAI">
+            </a>
+        </div>
+        <nav class="nav-menu">
+            <a asp-controller="Home" asp-action="Index">Início</a>
+            <a asp-controller="Home" asp-action="Index" href="/Home/Index#sobre">Sobre o Centro</a>
+            <a asp-controller="Home" asp-action="Index" href="/Home/Index#impactos">Impactos</a>
+            <a asp-controller="Eventos" asp-action="Galeria">Galeria</a>
+            <a asp-controller="Home" asp-action="Index" href="/Home/Index#contato">Contato</a>
+        </nav>
+        <div class="header-actions">
+            @if (Context.Session.GetString("UsuarioId") != null)
+            {
+                <span class="user-email">@Context.Session.GetString("Email")</span>
+                <a asp-controller="Login" asp-action="Logout" class="btn-logout" title="Sair"><i class="fa-solid fa-right-from-bracket"></i></a>
+            }
+            else
+            {
+                <a asp-controller="Login" asp-action="Index" class="btn-agenda-header" title="Login"><i class="fa-regular fa-user"></i> Login </a>
+            }
+        </div>
+    </div>
+</header>
+<!-- Corpo Principal em Grid -->
+<main style="padding-top: 120px; background-color: var(--bg-light); min-height: calc(100vh - 350px); color: var(--text-dark);">
+    <div class="section-header-row" style="margin-bottom: 3rem;">
+        <div class="section-title-block">
+            <span class="section-tag-purple">AGENDA COMPLETA</span>
+            <h2 class="section-title-dark">Todos os Eventos Ativos</h2>
+        </div>
+        <a asp-controller="Home" asp-action="Index" class="btn-outline-blue"><i class="fa-solid fa-arrow-left"></i> Voltar ao Início</a>
+    </div>
+    <div class="events-grid" style="margin-bottom: 80px;">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                bool isInscrito = false;
+                if (Context.Session.GetString("Role") == "Aluno" && ViewBag.InscritosIds != null)
+                {
+                    isInscrito = ((List<int>)ViewBag.InscritosIds).Contains(item.EventoID);
+                }
+                string category = "WORKSHOP";
+                string cardImage = "card_workshop.png";
+                string badgeClass = "badge-blue";
+                if (item.NomeEvento.Contains("IoT", StringComparison.OrdinalIgnoreCase))
+                {
+                    category = "PALESTRA";
+                    cardImage = "card_IOT.png";
+                    badgeClass = "badge-purple";
+                }
+                else if (item.NomeEvento.Contains("IA", StringComparison.OrdinalIgnoreCase) ||
+                        item.NomeEvento.Contains("Inteligência", StringComparison.OrdinalIgnoreCase))
+                {
+                    category = "PALESTRA";
+                    cardImage = "card_palestra.png";
+                    badgeClass = "badge-pink";
+                }
+                string imageSrc = string.IsNullOrEmpty(item.ImagemUrl)
+                    ? Url.Content("~/img/" + cardImage)
+                    : item.ImagemUrl;
+                <div class="event-card-new event-card-clickable"
+                     data-id="@item.EventoID"
+                     data-nome="@item.NomeEvento"
+                     data-data="@item.DataEvento.ToString("dd/MM/yyyy")"
+                     data-data-formatada="@item.DataEvento.ToString("dd 'de' MMMM 'de' yyyy")"
+                     data-hora="@item.HorarioEvento.ToString("HH:mm")"
+                     data-hora-formatada="às @item.HorarioEvento.ToString("HH'h'")"
+                     data-local="@item.LocalEvento"
+                     data-palestrante="@item.NomePalestrante"
+                     data-imagem="@imageSrc"
+                     data-descricao="@(string.IsNullOrEmpty(item.Descricao) ? "Sem descrição disponível para este evento." : item.Descricao)"
+                     data-inscrito="@(isInscrito ? "true" : "false")"
+                     data-role="@(Context.Session.GetString("Role") ?? "")">
+                    
+                    <div class="card-image-wrapper">
+                        <img src="@imageSrc" alt="@item.NomeEvento">
+                        <span class="category-badge @badgeClass">@category</span>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="event-header">
+                            <div class="date-badge">
+                                <span class="date-day">@item.DataEvento.ToString("dd")</span>
+                                <span class="date-month">@item.DataEvento.ToString("MMM").ToUpper()</span>
+                            </div>
+                            <div class="event-title">
+                                <h3>@item.NomeEvento</h3>
+                                <div class="event-meta">
+                                    <span class="event-time">
+                                        <i class="fa-regular fa-clock"></i>
+                                        às @item.HorarioEvento.ToString("HH:mm")
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p class="event-description">
+                            @(string.IsNullOrEmpty(item.Descricao) ? "Participe deste incrível evento integrado do SENAI." : (item.Descricao.Length > 85 ? item.Descricao.Substring(0, 82) + "..." : item.Descricao))
+                        </p>
+                        <p class="event-description" style="font-weight: 500; margin-top: auto;">Palestrante: @item.NomePalestrante | Local: @item.LocalEvento</p>
+                    </div>
+                    
+                    <div class="card-footer-action">
+                        @if (isInscrito)
+                        {
+                            <span class="btn-subscribe-disabled" style="display: block; text-align: center; color: #22c55e; font-weight: bold;"><i class="fa-solid fa-circle-check"></i> Inscrito</span>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn-subscribe-link btn-enroll-trigger">
+                                <span>Saber mais</span> <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="no-events">Nenhum evento ativo no momento.</p>
+        }
+    </div>
+</main>
+<!-- Footer -->
+<footer id="contato" class="footer-new">
+    <div class="footer-grid">
+        <div class="footer-col brand-col">
+            <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="footer-logo">
+            <p class="footer-desc">Educando hoje, transformando o amanhã.</p>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/senai.sp/"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://br.linkedin.com/company/senai-nacional"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://www.youtube.com/channel/UCaz1BMUVug86pd_uS598X1A"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://www.facebook.com/senaisp.scsmeca/"><i class="fa-brands fa-facebook"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h3>NAVEGAÇÃO</h3>
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index" href="/Home/Index#eventos">Eventos</a></li>
+                <li><a asp-controller="Home" asp-action="Index" href="/Home/Index#sobre">Sobre o Centro</a></li>
+                <li><a asp-controller="Home" asp-action="Index" href="/Home/Index#impactos">Impactos</a></li>
+                <li><a asp-controller="Eventos" asp-action="Galeria">Galeria</a></li>
+                <li><a asp-controller="Home" asp-action="Index" href="/Home/Index#contato">Contato</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3>CONTATO</h3>
+            <ul>
+                <li><i class="fa-solid fa-phone"></i> (11) 3551-8291</li>
+                <li><i class="fa-solid fa-envelope"></i> senai@email.com</li>
+                <li><i class="fa-solid fa-globe"></i> www.aluno.senai.br</li>
+                <li><i class="fa-solid fa-location-dot"></i> Rua Niterói, 180<br>Centro, São Caetano do Sul - SP<br>CEP: 09510-200</li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3>LINKS ÚTEIS</h3>
+            <ul>
+                <li><a href="#">Política de Privacidade</a></li>
+                <li><a href="#">Perguntas Frequentes</a></li>
+                <li><a href="#">Centro de Eventos</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div id="eventModal" class="ev-modal-overlay" style="display: none;">
+    <div class="ev-modal-container">
+        <!-- Botão de Fechar X -->
+        <button class="ev-modal-close-btn" id="closeModalBtn" type="button">&times;</button>
+        
+        <div class="ev-modal-content-wrapper">
+            <!-- Lado Esquerdo: Imagem + Grid Hexagonal -->
+            <div class="ev-modal-left">
+                <div class="ev-modal-image-container">
+                    <img id="modalEventImage" src="" alt="Imagem do Evento">
+                </div>
+                
+                <!-- Grid de 4 Destaques com Ícones Hexagonais -->
+                <div class="ev-modal-highlights-grid">
+                    <div class="ev-highlight-item">
+                        <div class="ev-hex-icon-wrapper">
+                            <div class="ev-hex-icon"><i class="fa-regular fa-calendar"></i></div>
+                        </div>
+                        <span class="ev-highlight-title" id="gridEventDate">15 de Julho de 2026</span>
+                        <span class="ev-highlight-subtitle" id="gridEventTime">às 15h</span>
+                    </div>
+                    
+                    <div class="ev-highlight-item">
+                        <div class="ev-hex-icon-wrapper">
+                            <div class="ev-hex-icon"><i class="fa-solid fa-location-dot"></i></div>
+                        </div>
+                        <span class="ev-highlight-title" id="gridEventLocal">Senai Innovation</span>
+                        <span class="ev-highlight-subtitle">Hub e Online</span>
+                    </div>
+                    
+                    <div class="ev-highlight-item">
+                        <div class="ev-hex-icon-wrapper">
+                            <div class="ev-hex-icon"><i class="fa-solid fa-user"></i></div>
+                        </div>
+                        <span class="ev-highlight-title">Palestrante:</span>
+                        <span class="ev-highlight-subtitle highlight-blue" id="gridEventPalestrante">Eng. Ricardo Mendes</span>
+                    </div>
+                    
+                    <div class="ev-highlight-item">
+                        <div class="ev-hex-icon-wrapper">
+                            <div class="ev-hex-icon"><i class="fa-solid fa-display"></i></div>
+                        </div>
+                        <span class="ev-highlight-title">Evento híbrido</span>
+                        <span class="ev-highlight-subtitle">Presencial e online</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lado Direito: Informações Detalhadas + Botão de Inscrição -->
+            <div class="ev-modal-right">
+                <div class="ev-modal-tag-row">
+                    <span class="ev-modal-tag">EVENTO SENAI</span>
+                    <span class="ev-modal-tag-line"></span>
+                    <button class="ev-modal-share-btn" type="button"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
+                </div>
+                
+                <h2 class="ev-modal-title" id="modalEventTitle">Workshop de Robótica Industrial</h2>
+                
+                <!-- Lista de Detalhes Rápidos -->
+                <div class="ev-modal-info-list">
+                    <div class="ev-info-list-item">
+                        <span class="ev-info-icon icon-purple"><i class="fa-regular fa-calendar"></i></span>
+                        <p><strong>Data:</strong> <span id="modalEventDate">15 de Julho de 2026 às 15h</span></p>
+                    </div>
+                    <div class="ev-info-list-item">
+                        <span class="ev-info-icon icon-pink"><i class="fa-solid fa-location-dot"></i></span>
+                        <p><strong>Local:</strong> <span id="modalEventLocalFull">Senai Innovation Hub e Transmissão Online</span></p>
+                    </div>
+                    <div class="ev-info-list-item">
+                        <span class="ev-info-icon icon-blue"><i class="fa-solid fa-user"></i></span>
+                        <p><strong>Palestrante:</strong> <span id="modalEventPalestranteFull">Eng. Ricardo Mendes, mestre em automação...</span></p>
+                    </div>
+                </div>
+                
+                <hr class="ev-modal-divider">
+                
+                <!-- Descrição -->
+                <div class="ev-modal-description">
+                    <p id="modalEventDescription">Entenda como a implementação de robôs colaborativos...</p>
+                </div>
+                
+                <!-- Ações -->
+                <div class="ev-modal-action-wrapper">
+                    <span id="modalSubscribedMessage" class="ev-subscribed-msg" style="display: none;">
+                        <i class="fa-solid fa-circle-check"></i> Você já está inscrito neste evento!
+                    </span>
+                    <button id="modalSubscribeBtn" class="btn-ev-modal-subscribe-gradient" type="button">
+                        <span>Inscrever-se</span> <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
