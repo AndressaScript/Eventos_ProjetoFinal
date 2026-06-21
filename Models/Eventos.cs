@@ -40,5 +40,7 @@ namespace Eventos_ProjetoFinal.Models
         public int AdminID { get; set; }
 
         public string? Descricao { get; set; }
+
+        public string? ImagemUrl { get; set; }
     }
 }
