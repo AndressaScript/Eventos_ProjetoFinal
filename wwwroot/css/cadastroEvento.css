@@ -259,7 +259,7 @@
 }
 
 .btn-save-publish-dark {
-    background-color: #0b132c; /* Azul escuro igual à imagem */
+    background-color: #0b132c; /* Azul escuro */
     color: #ffffff;
     font-weight: 700;
     font-size: 0.95rem;
@@ -313,7 +313,6 @@
    CORREÇÃO DE ESTADOS DO MENU DA SIDEBAR
    ========================================================================== */
 
-/* Cor padrão para os itens não selecionados (Cinza suave) */
 .menu-item-new {
     color: #94a3b8 !important;
     display: flex;
@@ -326,31 +325,147 @@
 }
 
 .menu-item-new i {
-    color: #64748b; /* Ícone um pouco mais discreto por padrão */
+    color: #64748b; 
     transition: all 0.3s ease;
 }
 
-/* Efeito Hover (Quando passa o mouse em qualquer item) */
 .menu-item-new:hover {
     background-color: rgba(255, 255, 255, 0.03);
     color: #ffffff !important;
 }
 
-/* O ITEM ATIVO: Quando a classe .active estiver presente, acende em roxo/neon */
 .menu-item-new.active {
-    background-color: rgba(217, 70, 239, 0.1) !important; /* Fundo roxo bem sutil */
-    color: #d946ef !important; /* Texto roxo neon */
+    background-color: rgba(217, 70, 239, 0.1) !important; 
+    color: #d946ef !important; /* Roxo neon */
     font-weight: 600;
 }
 
-/* Força o ícone dentro do item ativo a ficar roxo também */
 .menu-item-new.active i {
     color: #d946ef !important;
 }
 
-/* Ajustes específicos para a descrição (textarea) */
 .input-field-group textarea {
     resize: vertical;
     min-height: 120px;
     line-height: 1.5;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+    right: 1.25rem;
+    height: 100%;
+    width: 1.5rem;
+    z-index: 2;
+}
+
+.input-with-icon input {
+    position: relative;
+    z-index: 1;
+}
+
+.field-icon-light {
+    z-index: 1;
+}
+
+.upload-box-dotted input[type="file"] {
+    display: none;
+}
+
+#imagePreviewContainer {
+    display: none;
+    margin-top: 15px;
+    text-align: center;
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 16px;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#btnRemoveImage {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.form-main-title span {
+    color: #d9383a;
+}
+
+#imagePreviewContainer.show-preview {
+    display: block;
+}
+
+.upload-box-dotted.hide-upload {
+    display: none;
+}
+
+/* Cards de Informação na Sidebar */
+.sidebar-cards-section {
+    padding: 20px;
+    margin-top: auto; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.info-card-new {
+    background-color: #0b132c; 
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+.info-card-new:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(11, 19, 44, 0.8);
+}
+
+.card-icon-blue, .card-icon-purple {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.card-icon-blue {
+    background-color: rgba(0, 82, 255, 0.1);
+    color: #0052ff;
+}
+
+.card-icon-purple {
+    background-color: rgba(217, 70, 239, 0.1);
+    color: #d946ef;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.card-label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.card-value {
+    font-size: 1.2rem;
+    color: #ffffff;
+    font-weight: 700;
 }
