@@ -3,20 +3,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeModalBtn = document.getElementById('closeModalBtn');
     const modalSubscribeBtn = document.getElementById('modalSubscribeBtn');
     const modalSubscribedMessage = document.getElementById('modalSubscribedMessage');
-    
+   
     // Elementos do Modal para povoar (Lado Direito)
     const modalEventTitle = document.getElementById('modalEventTitle');
     const modalEventDescription = document.getElementById('modalEventDescription');
     const modalEventImage = document.getElementById('modalEventImage');
+   
     const modalEventDate = document.getElementById('modalEventDate');
-    const modalEventLocalFull = document.getElementById('modalEventLocalFull');
-    const modalEventPalestranteFull = document.getElementById('modalEventPalestranteFull');
-    
-    // Elementos do Grid de destaques (Lado Esquerdo)
-    const gridEventDate = document.getElementById('gridEventDate');
-    const gridEventTime = document.getElementById('gridEventTime');
-    const gridEventLocal = document.getElementById('gridEventLocal');
-    const gridEventPalestrante = document.getElementById('gridEventPalestrante');
+    const modalEventLocal = document.getElementById('modalEventLocal');
+    const modalEventPalestrante = document.getElementById('modalEventPalestrante');
 
     let activeCard = null;
 
@@ -38,9 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function openModal(card) {
         const id = card.dataset.id;
         const nome = card.dataset.nome;
-        const data = card.dataset.data;
         const dataFormatada = card.dataset.dataFormatada;
-        const hora = card.dataset.hora;
         const horaFormatada = card.dataset.horaFormatada;
         const local = card.dataset.local;
         const palestrante = card.dataset.palestrante;
@@ -54,15 +47,11 @@ document.addEventListener('DOMContentLoaded', function () {
         modalEventDescription.textContent = descricao;
         modalEventImage.src = imagem;
         modalEventImage.alt = nome;
+       
+        // Povoa os 3 campos principais com os novos IDs
         modalEventDate.textContent = `${dataFormatada} ${horaFormatada}`;
-        modalEventLocalFull.textContent = `${local} e Transmissão Online`;
-        modalEventPalestranteFull.textContent = `${palestrante}, especialista convidado do SENAI.`;
-
-        // Povoa grid de destaques hexagonais (Lado Esquerdo)
-        gridEventDate.textContent = dataFormatada.split(' de ')[0] + ' de ' + dataFormatada.split(' de ')[1]; // Simplifica
-        gridEventTime.textContent = horaFormatada;
-        gridEventLocal.textContent = local.length > 20 ? local.substring(0, 18) + '...' : local;
-        gridEventPalestrante.textContent = palestrante;
+        modalEventLocal.textContent = `${local} e Transmissão Online`;
+        modalEventPalestrante.textContent = palestrante;
 
         // Guarda os IDs no botão do modal
         modalSubscribeBtn.dataset.eventoId = id;
@@ -88,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => {
             modal.classList.add('active');
         }, 10);
-        
+       
         document.body.style.overflow = 'hidden';
     }
 
@@ -104,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (closeModalBtn) {
         closeModalBtn.addEventListener('click', closeModalFunc);
     }
-    
+   
     modal.addEventListener('click', function (e) {
         if (e.target === modal) {
             closeModalFunc();
@@ -145,10 +134,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Atualiza o Card físico na tela de fundo (Fim do Saber mais, bloqueia nova inscrição)
                 if (activeCard) {
                     activeCard.dataset.inscrito = 'true';
-                    
+                   
                     const actionWrapper = activeCard.querySelector('.card-footer-action');
                     if (actionWrapper) {
-                        actionWrapper.innerHTML = <span class="btn-subscribe-disabled" style="display: block; text-align: center; color: #22c55e; font-weight: bold;"><i class="fa-solid fa-circle-check"></i> Inscrito</span>;
+                        actionWrapper.innerHTML = `<span class="btn-subscribe-disabled" style="display: block; text-align: center; color: #22c55e; font-weight: bold;"><i class="fa-solid fa-circle-check"></i> Inscrito</span>`;
                     }
                 }
             } else {
@@ -175,33 +164,33 @@ document.addEventListener('DOMContentLoaded', function () {
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-    
+   
     if (track && prevBtn && nextBtn) {
         const items = track.querySelectorAll('.carousel-item-new');
         const totalItems = items.length;
         let currentIndex = 0;
-        
+       
         function getItemsToShow() {
             if (window.innerWidth <= 640) return 1;
             if (window.innerWidth <= 1024) return 2;
             return 3;
         }
-        
+       
         let itemsToShow = getItemsToShow();
-        
+       
         if (totalItems <= itemsToShow) {
             prevBtn.style.display = 'none';
             nextBtn.style.display = 'none';
         } else {
             updateCarouselButtons();
-            
+           
             nextBtn.addEventListener('click', () => {
                 if (currentIndex < totalItems - itemsToShow) {
                     currentIndex++;
                     slideCarousel();
                 }
             });
-            
+           
             prevBtn.addEventListener('click', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
@@ -209,26 +198,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }
-        
+       
         function slideCarousel() {
             if (totalItems === 0) return;
             const itemWidth = items[0].getBoundingClientRect().width;
             const trackStyle = window.getComputedStyle(track);
             const gap = parseFloat(trackStyle.gap) || 0;
             const slideAmount = itemWidth + gap;
-            
+           
             track.style.transform = `translateX(-${currentIndex * slideAmount}px)`;
             updateCarouselButtons();
         }
-        
+       
         function updateCarouselButtons() {
             prevBtn.disabled = currentIndex === 0;
             nextBtn.disabled = currentIndex >= totalItems - itemsToShow;
         }
-        
+       
         window.addEventListener('resize', () => {
             itemsToShow = getItemsToShow();
-            
+           
             if (totalItems <= itemsToShow) {
                 prevBtn.style.display = 'none';
                 nextBtn.style.display = 'none';
@@ -237,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 prevBtn.style.display = 'flex';
                 nextBtn.style.display = 'flex';
-                
+               
                 if (currentIndex > totalItems - itemsToShow) {
                     currentIndex = Math.max(0, totalItems - itemsToShow);
                 }

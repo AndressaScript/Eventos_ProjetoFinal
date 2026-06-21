@@ -8,6 +8,7 @@
 @section Scripts {
     <script src="~/js/home.js"></script>
 }
+
 <!-- Header -->
 <header class="header">
     <div class="header-container">
@@ -36,6 +37,7 @@
         </div>
     </div>
 </header>
+
 <!-- Corpo Principal em Grid -->
 <main style="padding-top: 120px; background-color: var(--bg-light); min-height: calc(100vh - 350px); color: var(--text-dark);">
     <div class="section-header-row" style="margin-bottom: 3rem;">
@@ -45,6 +47,7 @@
         </div>
         <a asp-controller="Home" asp-action="Index" class="btn-outline-blue"><i class="fa-solid fa-arrow-left"></i> Voltar ao Início</a>
     </div>
+
     <div class="events-grid" style="margin-bottom: 80px;">
         @if (Model != null && Model.Any())
         {
@@ -55,9 +58,11 @@
                 {
                     isInscrito = ((List<int>)ViewBag.InscritosIds).Contains(item.EventoID);
                 }
+
                 string category = "WORKSHOP";
                 string cardImage = "card_workshop.png";
                 string badgeClass = "badge-blue";
+
                 if (item.NomeEvento.Contains("IoT", StringComparison.OrdinalIgnoreCase))
                 {
                     category = "PALESTRA";
@@ -71,9 +76,11 @@
                     cardImage = "card_palestra.png";
                     badgeClass = "badge-pink";
                 }
+
                 string imageSrc = string.IsNullOrEmpty(item.ImagemUrl)
                     ? Url.Content("~/img/" + cardImage)
                     : item.ImagemUrl;
+
                 <div class="event-card-new event-card-clickable"
                      data-id="@item.EventoID"
                      data-nome="@item.NomeEvento"
@@ -87,12 +94,12 @@
                      data-descricao="@(string.IsNullOrEmpty(item.Descricao) ? "Sem descrição disponível para este evento." : item.Descricao)"
                      data-inscrito="@(isInscrito ? "true" : "false")"
                      data-role="@(Context.Session.GetString("Role") ?? "")">
-                    
+                   
                     <div class="card-image-wrapper">
                         <img src="@imageSrc" alt="@item.NomeEvento">
                         <span class="category-badge @badgeClass">@category</span>
                     </div>
-                    
+                   
                     <div class="card-content">
                         <div class="event-header">
                             <div class="date-badge">
@@ -109,13 +116,13 @@
                                 </div>
                             </div>
                         </div>
-                        
+                       
                         <p class="event-description">
                             @(string.IsNullOrEmpty(item.Descricao) ? "Participe deste incrível evento integrado do SENAI." : (item.Descricao.Length > 85 ? item.Descricao.Substring(0, 82) + "..." : item.Descricao))
                         </p>
                         <p class="event-description" style="font-weight: 500; margin-top: auto;">Palestrante: @item.NomePalestrante | Local: @item.LocalEvento</p>
                     </div>
-                    
+                   
                     <div class="card-footer-action">
                         @if (isInscrito)
                         {
@@ -137,6 +144,7 @@
         }
     </div>
 </main>
+
 <!-- Footer -->
 <footer id="contato" class="footer-new">
     <div class="footer-grid">
@@ -179,87 +187,78 @@
         </div>
     </div>
 </footer>
+
+<!-- NOVO MODAL DE DETALHES GLASSMORPHISM LIGHT/WHITE -->
 <div id="eventModal" class="ev-modal-overlay" style="display: none;">
     <div class="ev-modal-container">
         <!-- Botão de Fechar X -->
         <button class="ev-modal-close-btn" id="closeModalBtn" type="button">&times;</button>
-        
+       
         <div class="ev-modal-content-wrapper">
-            <!-- Lado Esquerdo: Imagem + Grid Hexagonal -->
+            <!-- Lado Esquerdo: Apenas a Imagem Grande -->
             <div class="ev-modal-left">
                 <div class="ev-modal-image-container">
                     <img id="modalEventImage" src="" alt="Imagem do Evento">
                 </div>
-                
-                <!-- Grid de 4 Destaques com Ícones Hexagonais -->
-                <div class="ev-modal-highlights-grid">
-                    <div class="ev-highlight-item">
+            </div>
+           
+            <!-- Lado Direito: Título + Destaques Hexagonais + Descrição + Inscrição -->
+            <div class="ev-modal-right">
+                <div class="ev-modal-header-row">
+                    <h2 class="ev-modal-title" id="modalEventTitle">Título do Evento</h2>
+                    <button class="ev-modal-share-btn" type="button"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
+                </div>
+               
+                <!-- Grid de Destaques Hexagonais (Alinhados como grid de 2 colunas) -->
+                <div class="ev-modal-highlights-list">
+                    <div class="ev-highlight-item-new">
                         <div class="ev-hex-icon-wrapper">
                             <div class="ev-hex-icon"><i class="fa-regular fa-calendar"></i></div>
                         </div>
-                        <span class="ev-highlight-title" id="gridEventDate">15 de Julho de 2026</span>
-                        <span class="ev-highlight-subtitle" id="gridEventTime">às 15h</span>
+                        <div class="ev-highlight-text-block">
+                            <span class="ev-highlight-label">DATA E HORA</span>
+                            <span class="ev-highlight-val" id="modalEventDate">25 de Junho às 03h</span>
+                        </div>
                     </div>
-                    
-                    <div class="ev-highlight-item">
+                   
+                    <div class="ev-highlight-item-new">
                         <div class="ev-hex-icon-wrapper">
                             <div class="ev-hex-icon"><i class="fa-solid fa-location-dot"></i></div>
                         </div>
-                        <span class="ev-highlight-title" id="gridEventLocal">Senai Innovation</span>
-                        <span class="ev-highlight-subtitle">Hub e Online</span>
+                        <div class="ev-highlight-text-block">
+                            <span class="ev-highlight-label">LOCALIZAÇÃO</span>
+                            <span class="ev-highlight-val" id="modalEventLocal">Auditório Central</span>
+                        </div>
                     </div>
-                    
-                    <div class="ev-highlight-item">
+                   
+                    <div class="ev-highlight-item-new">
                         <div class="ev-hex-icon-wrapper">
                             <div class="ev-hex-icon"><i class="fa-solid fa-user"></i></div>
                         </div>
-                        <span class="ev-highlight-title">Palestrante:</span>
-                        <span class="ev-highlight-subtitle highlight-blue" id="gridEventPalestrante">Eng. Ricardo Mendes</span>
+                        <div class="ev-highlight-text-block">
+                            <span class="ev-highlight-label">PALESTRANTE</span>
+                            <span class="ev-highlight-val" id="modalEventPalestrante">Eng. Ricardo Mendes</span>
+                        </div>
                     </div>
-                    
-                    <div class="ev-highlight-item">
+                   
+                    <div class="ev-highlight-item-new">
                         <div class="ev-hex-icon-wrapper">
                             <div class="ev-hex-icon"><i class="fa-solid fa-display"></i></div>
                         </div>
-                        <span class="ev-highlight-title">Evento híbrido</span>
-                        <span class="ev-highlight-subtitle">Presencial e online</span>
+                        <div class="ev-highlight-text-block">
+                            <span class="ev-highlight-label">FORMATO</span>
+                            <span class="ev-highlight-val" id="modalEventFormat">Híbrido (Presencial/Online)</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Lado Direito: Informações Detalhadas + Botão de Inscrição -->
-            <div class="ev-modal-right">
-                <div class="ev-modal-tag-row">
-                    <span class="ev-modal-tag">EVENTO SENAI</span>
-                    <span class="ev-modal-tag-line"></span>
-                    <button class="ev-modal-share-btn" type="button"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
-                </div>
-                
-                <h2 class="ev-modal-title" id="modalEventTitle">Workshop de Robótica Industrial</h2>
-                
-                <!-- Lista de Detalhes Rápidos -->
-                <div class="ev-modal-info-list">
-                    <div class="ev-info-list-item">
-                        <span class="ev-info-icon icon-purple"><i class="fa-regular fa-calendar"></i></span>
-                        <p><strong>Data:</strong> <span id="modalEventDate">15 de Julho de 2026 às 15h</span></p>
-                    </div>
-                    <div class="ev-info-list-item">
-                        <span class="ev-info-icon icon-pink"><i class="fa-solid fa-location-dot"></i></span>
-                        <p><strong>Local:</strong> <span id="modalEventLocalFull">Senai Innovation Hub e Transmissão Online</span></p>
-                    </div>
-                    <div class="ev-info-list-item">
-                        <span class="ev-info-icon icon-blue"><i class="fa-solid fa-user"></i></span>
-                        <p><strong>Palestrante:</strong> <span id="modalEventPalestranteFull">Eng. Ricardo Mendes, mestre em automação...</span></p>
-                    </div>
-                </div>
-                
+               
                 <hr class="ev-modal-divider">
-                
+               
                 <!-- Descrição -->
                 <div class="ev-modal-description">
                     <p id="modalEventDescription">Entenda como a implementação de robôs colaborativos...</p>
                 </div>
-                
+               
                 <!-- Ações -->
                 <div class="ev-modal-action-wrapper">
                     <span id="modalSubscribedMessage" class="ev-subscribed-msg" style="display: none;">
