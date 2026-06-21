@@ -309,11 +309,6 @@
     }
 }
 
-
-
-
-
-
 /* ==========================================================================
    CORREÇÃO DE ESTADOS DO MENU DA SIDEBAR
    ========================================================================== */
@@ -351,4 +346,11 @@
 /* Força o ícone dentro do item ativo a ficar roxo também */
 .menu-item-new.active i {
     color: #d946ef !important;
+}
+
+/* Ajustes específicos para a descrição (textarea) */
+.input-field-group textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
 }

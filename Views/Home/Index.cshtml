@@ -14,13 +14,27 @@
         <div class="logo-container">
             <img class="logo-senai" src="~/img/Senai_logo_footer.png" alt="Logo SENAI">
         </div>
-        <nav class="nav-menu">
-            <a href="#eventos">Eventos</a>
-            <a href="#sobre">Sobre o Centro</a>
-            <a href="#impactos">Impactos</a>
-            <a asp-controller="Eventos" asp-action="Galeria">Galeria</a>
-            <a href="#contato">Contato</a>
-        </nav>
+<nav class="nav-menu">
+
+    @if (Context.Session.GetString("Role") == "Admin")
+    {
+        <a asp-controller="Eventos" asp-action="Index">
+            Painel de Eventos
+        </a>
+    }
+    else
+    {
+        <a href="#eventos">
+            Eventos
+        </a>
+    }
+
+    <a href="#sobre">Sobre o Centro</a>
+    <a href="#impactos">Impactos</a>
+    <a asp-controller="Eventos" asp-action="Galeria">Galeria</a>
+    <a href="#contato">Contato</a>
+
+</nav>
         <div class="header-actions">
             @if (Context.Session.GetString("UsuarioId") != null)
             {
@@ -55,22 +69,51 @@
 
                 <!-- Hero Highlights (Cards na base) -->
                 <div class="hero-highlights">
+
                     <div class="highlight-card">
-                        <div class="highlight-icon"><i class="fa-regular fa-calendar-check"></i></div>
-                        <h3>Eventos que inspiram</h3>
+                        <div class="highlight-icon">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+
+                        <div class="highlight-text">
+                            <h3>Experiências práticas</h3>
+                            <p>Aprenda além da sala de aula.</p>
+                        </div>
                     </div>
+
                     <div class="highlight-card">
-                        <div class="highlight-icon"><i class="fa-solid fa-users"></i></div>
-                        <h3>Conexões que transformam</h3>
+                        <div class="highlight-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+
+                        <div class="highlight-text">
+                            <h3>Networking profissional</h3>
+                            <p>Conecte-se com empresas e especialistas.</p>
+                        </div>
                     </div>
+
                     <div class="highlight-card">
-                        <div class="highlight-icon"><i class="fa-solid fa-rocket"></i></div>
-                        <h3>Inovação que move o futuro</h3>
+                        <div class="highlight-icon">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+
+                        <div class="highlight-text">
+                            <h3>Tecnologia e inovação</h3>
+                            <p>Contato com tendências do mercado.</p>
+                        </div>
                     </div>
+
                     <div class="highlight-card">
-                        <div class="highlight-icon"><i class="fa-regular fa-star"></i></div>
-                        <h3>Impacto que gera oportunidades</h3>
+                        <div class="highlight-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+
+                        <div class="highlight-text">
+                            <h3>Crescimento de carreira</h3>
+                            <p>Oportunidades para seu desenvolvimento.</p>
+                        </div>
                     </div>
+
                 </div>
             </section>
             <!-- Seção Próximos Eventos -->

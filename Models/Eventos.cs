@@ -38,5 +38,7 @@ namespace Eventos_ProjetoFinal.Models
 
         [ForeignKey("AdminID")]
         public int AdminID { get; set; }
+
+        public string? Descricao { get; set; }
     }
 }
