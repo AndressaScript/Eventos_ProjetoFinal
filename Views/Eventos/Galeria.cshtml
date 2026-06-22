@@ -1,10 +1,8 @@
 @model IEnumerable<Eventos_ProjetoFinal.Models.Eventos>
 @{
     ViewData["Title"] = "Galeria de Eventos";
-    // Define se o usuário logado é Admin
     bool isAdmin = Context.Session.GetString("Role") == "Admin";
 }
-
 @section Styles {
     <link rel="stylesheet" href="~/css/padrao.css" />
     <link rel="stylesheet" href="~/css/header.css" />
@@ -12,21 +10,17 @@
     <link rel="stylesheet" href="~/css/listaEventos.css" />
     @if (!isAdmin)
     {
-        <!-- Se for Aluno/Visitante, carrega o CSS do Portal Público -->
         <link rel="stylesheet" href="~/css/home.css" />
     }
 }
-
 @if (isAdmin)
 {
-    <!-- =================================================================
-         VISÃO DO ADMINISTRADOR (Com Sidebar e Layout do Painel)
-         ================================================================= -->
-    
-    <!-- Topbar Administrativa -->
+    <!-- Topbar Administrativa com link corrigido na Logo -->
     <header class="admin-topbar-new">
         <div class="logo-senai-admin">
-            <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="logo-img">
+            <a asp-controller="Home" asp-action="Index">
+                <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="logo-img">
+            </a>
         </div>
         <div class="admin-profile-new">
             <div class="profile-avatar"><i class="fa-solid fa-circle-user"></i></div>
@@ -41,19 +35,15 @@
                 <a asp-controller="Eventos" asp-action="Index" class="menu-item-new">
                     <i class="fa-solid fa-table-cells-large"></i> Visão Geral
                 </a>
-                <a asp-controller="Eventos" asp-action="Cadastrar" class="menu-item-new highlight-menu">
+                <a asp-controller="Eventos" asp-action="Cadastrar" class="menu-item-new">
                     <i class="fa-solid fa-calendar-plus"></i> Cadastrar Evento
                 </a>
-                <!-- MENU ATIVO CORRIGIDO AQUI (pink-active) -->
                 <a asp-controller="Eventos" asp-action="Galeria" class="menu-item-new active pink-active">
                     <i class="fa-regular fa-image"></i> Galeria de Eventos
                 </a>
-                <a href="#" class="menu-item-new">
-                    <i class="fa-solid fa-gear"></i> Configurações
-                </a>
             </nav>
-            
-            <!-- Cards de Estatísticas na base da Sidebar (Cálculo dinâmico) -->
+           
+            <!-- Cards de Estatísticas na base da Sidebar -->
             <div class="sidebar-stats-section">
                 <div class="stat-card-aside card-blue-glow">
                     <div class="stat-card-icon"><i class="fa-regular fa-calendar-check"></i></div>
@@ -62,7 +52,6 @@
                         <span class="stat-card-value">@Model.Count(e => e.StatusEvento == "Ativo")</span>
                     </div>
                 </div>
-
                 <div class="stat-card-aside card-purple-glow">
                     <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
                     <div class="stat-card-info">
@@ -107,10 +96,10 @@
                         {
                             albumImage = "galeria_eventos_1.png";
                         }
-                        
+                       
                         string highlightClass = isFirst ? "highlight-album-card" : "";
                         isFirst = false;
-                        
+                       
                         <div class="album-card @highlightClass">
                             <div class="album-img-wrapper">
                                 <img src="~/img/@albumImage" alt="@item.NomeEvento" />
@@ -149,10 +138,6 @@
 }
 else
 {
-    <!-- =================================================================
-         VISÃO DO ALUNO / PÚBLICA (Com Cabeçalho do Portal, Sem Sidebar)
-         ================================================================= -->
-    
     <!-- Header do Portal (Público) -->
     <header class="header">
         <div class="header-container">
@@ -186,7 +171,7 @@ else
     <!-- Conteúdo Principal Centralizado e Expandido -->
     <main class="public-gallery-main" style="padding-top: 130px; padding-bottom: 100px; background-color: #050814; min-height: 100vh;">
         <div class="public-gallery-container" style="max-width: 1300px; margin: 0 auto; padding: 0 2rem; display: flex; flex-direction: column; gap: 3rem;">
-            
+           
             <div class="content-header-new">
                 <div class="breadcrumb-new">Início > <span style="color: #d946ef; font-weight: bold;">Galeria de Eventos</span></div>
                 <div class="title-row-new" style="margin-bottom: 0.5rem;">
@@ -218,16 +203,16 @@ else
                         {
                             albumImage = "galeria_eventos_1.png";
                         }
-                        
+                       
                         string highlightClass = isFirst ? "highlight-album-card" : "";
                         isFirst = false;
-                        
+                       
                         <div class="album-card @highlightClass">
                             <div class="album-img-wrapper">
                                 <img src="~/img/@albumImage" alt="@item.NomeEvento" />
                             </div>
                             <div class="album-body">
-                                                           <h3>@item.NomeEvento</h3>
+                                <h3>@item.NomeEvento</h3>
                                 <div class="album-meta-list">
                                     <div class="album-meta-item">
                                         <i class="fa-regular fa-calendar"></i>

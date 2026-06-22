@@ -21,13 +21,25 @@ namespace Eventos_ProjetoFinal.Controllers
             _eventosService = eventosService;
             _context = context;
         }
-        
-        // Página Inicial: Carrossel com os próximos 6 eventos
+       
+        // Página Inicial: Carrossel com os próximos 6 eventos ou Dashboard do Admin
         public async Task<IActionResult> Index()
         {
-            var eventosAtivos = await _eventosService.ListarAtivos();
-            
             var role = HttpContext.Session.GetString("Role");
+           
+            if (role == "Admin")
+            {
+                // Carrega estatísticas dinâmicas em tempo real para a Home do Administrador
+                ViewBag.TotalEventos = await _context.Eventos.CountAsync();
+                ViewBag.TotalInscricoes = await _context.Inscricao.CountAsync();
+                ViewBag.TotalAlunos = await _context.Aluno.CountAsync();
+                ViewBag.TotalAvaliacoes = await _context.Avaliacao.CountAsync();
+               
+                return View(); // Retorna sem model (o painel do admin usará os ViewBags)
+            }
+
+            var eventosAtivos = await _eventosService.ListarAtivos();
+           
             if (role == "Aluno")
             {
                 if (int.TryParse(HttpContext.Session.GetString("UsuarioId"), out int alunoId))
@@ -48,7 +60,7 @@ namespace Eventos_ProjetoFinal.Controllers
                 .ThenBy(e => e.HorarioEvento.TimeOfDay)
                 .Take(6)
                 .ToList();
-            
+           
             return View(proximosEventos);
         }
 
@@ -57,7 +69,7 @@ namespace Eventos_ProjetoFinal.Controllers
         public async Task<IActionResult> Todos()
         {
             var eventosAtivos = await _eventosService.ListarAtivos();
-            
+           
             var role = HttpContext.Session.GetString("Role");
             if (role == "Aluno")
             {
@@ -76,7 +88,7 @@ namespace Eventos_ProjetoFinal.Controllers
                 .OrderBy(e => e.DataEvento)
                 .ThenBy(e => e.HorarioEvento.TimeOfDay)
                 .ToList();
-                
+               
             return View(ordenados);
         }
 
@@ -117,7 +129,7 @@ namespace Eventos_ProjetoFinal.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // NOVO: Endpoint AJAX para inscrição fluida no Modal de Detalhes
+        // Endpoint AJAX para inscrição fluida no Modal de Detalhes
         [HttpPost]
         public async Task<IActionResult> InscreverAjax(int eventoId)
         {
@@ -137,7 +149,7 @@ namespace Eventos_ProjetoFinal.Controllers
             // Evita duplicidade de inscrição
             var existente = await _context.Inscricao
                 .FirstOrDefaultAsync(i => i.AlunoID == usuarioId && i.EventoID == eventoId);
-                
+               
             if (existente != null)
             {
                 return Json(new { success = true, message = "Você já está inscrito neste evento." });
@@ -149,7 +161,7 @@ namespace Eventos_ProjetoFinal.Controllers
                 EventoID = eventoId,
                 DataInscricao = DateOnly.FromDateTime(DateTime.Now)
             };
-            
+           
             try
             {
                 await _context.Inscricao.AddAsync(inscricao);

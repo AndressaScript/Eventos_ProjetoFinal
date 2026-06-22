@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Eventos_ProjetoFinal.Interfaces;
 using Eventos_ProjetoFinal.Models;
-
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Eventos_ProjetoFinal.Controllers
 {
@@ -30,9 +31,10 @@ namespace Eventos_ProjetoFinal.Controllers
                 HttpContext.Session.SetString("Role", result.Role ?? "");
                 HttpContext.Session.SetString("Email", result.Usuario.Email);
 
+                // CORREÇÃO: Admin agora é redirecionado para a Home (Dashboard Geral) ao invés da tabela crua de eventos
                 if (result.Role == "Admin")
                 {
-                    return RedirectToAction("Index", "Eventos");
+                    return RedirectToAction("Index", "Home");
                 }
                 else if (result.Role == "Aluno")
                 {

@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 }
 
-<!-- Topbar Administrativa -->
+<!-- Topbar Administrativa com link corrigido na Logo -->
 <header class="admin-topbar-new">
     <div class="logo-senai-admin">
-        <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="logo-img">
+        <a asp-controller="Home" asp-action="Index">
+            <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="logo-img">
+        </a>
     </div>
     <div class="admin-profile-new">
         <div class="profile-avatar"><i class="fa-solid fa-circle-user"></i></div>
@@ -28,11 +30,9 @@
         <a asp-controller="Eventos" asp-action="Index" class="menu-item-new active active pink-active">
             <i class="fa-solid fa-table-cells-large"></i> Visão Geral
         </a>
-        
         <a asp-controller="Eventos" asp-action="Cadastrar" class="menu-item-new">
-            <i class="fa-solid fa-user-plus"></i> Cadastrar Evento
+            <i class="fa-solid fa-calendar-plus"></i> Cadastrar Evento
         </a>
-        
         <a asp-controller="Eventos" asp-action="Galeria" class="menu-item-new">
             <i class="fa-regular fa-image"></i> Galeria de Eventos
         </a>
@@ -67,7 +67,6 @@
                     <h1 class="admin-page-title">Gestão de Eventos</h1>
                     <span class="title-gradient-line"></span>
                 </div>
-                <!-- Botão Novo Evento que abre a página de criação -->
                 <a asp-controller="Eventos" asp-action="Cadastrar" class="btn-new-event-glow">+ Novo Evento</a>
             </div>
         </div>
@@ -80,7 +79,6 @@
                 {
                     @foreach (var item in Model)
                     {
-                        // Define ícones e cores dinamicamente baseados no tema do evento
                         string iconClass = "fa-solid fa-robot";
                         string colorClass = "icon-blue";
 

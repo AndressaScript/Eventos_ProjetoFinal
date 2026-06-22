@@ -1080,13 +1080,6 @@ img {
   max-width: 600px;
   width: calc(100% - 3rem);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  margin: 1.5rem auto;
-  border-radius: 12px;
-  text-align: center;
-  font-weight: 600;
-  max-width: 600px;
-  width: calc(100% - 3rem);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   animation: fadeIn 0.3s ease;
 }
 
@@ -1161,7 +1154,7 @@ img {
   align-items: center;
   max-width: 1300px;
   margin: 0 auto;
-  padding: 0 3.5rem; /* Espaço nas laterais para os botões absolutos */
+  padding: 0 3.5rem;
   width: 100%;
 }
 
@@ -1256,7 +1249,7 @@ img {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 23, 42, 0.65); /* Overlay escuro semi-transparente clássico */
+  background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   display: flex;
@@ -1272,7 +1265,7 @@ img {
 }
 
 .ev-modal-container {
-  background: #ffffff; /* Fundo branco limpo solicitado pelo usuário */
+  background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 28px;
   max-width: 1050px;
@@ -1281,7 +1274,7 @@ img {
   position: relative;
   box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.15),
-    0 0 30px rgba(99, 102, 241, 0.05); /* Sombra suave */
+    0 0 30px rgba(99, 102, 241, 0.05);
   transform: scale(0.9);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -1290,14 +1283,13 @@ img {
   transform: scale(1);
 }
 
-/* Botão de Fechar X no topo direito */
 .ev-modal-close-btn {
   position: absolute;
   top: 20px;
   right: 20px;
   background: none;
   border: none;
-  color: #64748b; /* Cinza médio para alto contraste no branco */
+  color: #64748b;
   font-size: 2rem;
   cursor: pointer;
   transition: var(--transition-smooth);
@@ -1306,18 +1298,16 @@ img {
 }
 
 .ev-modal-close-btn:hover {
-  color: #0f172a; /* Escurece no hover */
+  color: #0f172a;
   transform: rotate(90deg);
 }
 
-/* Estrutura interna em 2 colunas */
 .ev-modal-content-wrapper {
   display: flex;
   gap: 35px;
   align-items: stretch;
 }
 
-/* Lado Esquerdo (Apenas a Imagem Limpa e Grande) */
 .ev-modal-left {
   width: 44%;
   display: flex;
@@ -1339,7 +1329,6 @@ img {
   object-fit: cover;
 }
 
-/* Lado Direito (Título, Grade Hexagonal, Descrição e Ação) */
 .ev-modal-right {
   width: 56%;
   display: flex;
@@ -1352,14 +1341,13 @@ img {
   justify-content: space-between;
   gap: 15px;
   margin-bottom: 20px;
-  padding-right: 20px; /* Espaço para o botão Fechar X */
+  padding-right: 20px;
 }
 
-/* Título em Destaque no topo */
 .ev-modal-title {
   font-size: 2rem;
   font-weight: 800;
-  color: #0f172a; /* Texto escuro de altíssimo contraste */
+  color: #0f172a;
   line-height: 1.25;
 }
 
@@ -1378,12 +1366,11 @@ img {
   transform: translateY(-2px);
 }
 
-/* Grid Hexagonal de Destaques no Lado Direito (2x2) */
 .ev-modal-highlights-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  background: #f8fafc; /* Fundo cinza-azul muito suave para agrupar as infos */
+  background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 20px;
   padding: 20px;
@@ -1396,7 +1383,6 @@ img {
   gap: 14px;
 }
 
-/* Ícones em Formato de Hexágono com Gradiente Suave e Alto Contraste */
 .ev-hex-icon-wrapper {
   width: 48px;
   height: 48px;
@@ -1411,7 +1397,7 @@ img {
 
 .ev-hex-icon {
   font-size: 1.05rem;
-  color: #6366f1; /* Ícone em indigo escuro para leitura perfeita */
+  color: #6366f1;
 }
 
 .ev-highlight-text-block {
@@ -1421,7 +1407,7 @@ img {
 
 .ev-highlight-label {
   font-size: 0.7rem;
-  color: #64748b; /* Cinza médio informativo */
+  color: #64748b;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -1430,7 +1416,7 @@ img {
 
 .ev-highlight-val {
   font-size: 0.85rem;
-  color: #1e293b; /* Cinza escuro legível */
+  color: #1e293b;
   font-weight: 600;
   line-height: 1.3;
 }
@@ -1438,14 +1424,13 @@ img {
 .ev-modal-divider {
   border: 0;
   height: 1px;
-  background: #e2e8f0; /* Divisória clara */
+  background: #e2e8f0;
   margin-bottom: 20px;
 }
 
-/* Descrição legível em fundo branco */
 .ev-modal-description {
   font-size: 0.95rem;
-  color: #475569; /* Cinza grafite suave para leitura confortável */
+  color: #475569;
   line-height: 1.6;
   margin-bottom: 25px;
   max-height: 120px;
@@ -1453,7 +1438,6 @@ img {
   padding-right: 8px;
 }
 
-/* Customização de Scrollbar Clássica Clara */
 .ev-modal-description::-webkit-scrollbar {
   width: 4px;
 }
@@ -1468,7 +1452,6 @@ img {
   border-radius: 10px;
 }
 
-/* Linha de Ação (Inscrição) */
 .ev-modal-action-wrapper {
   margin-top: auto;
   display: flex;
@@ -1476,7 +1459,6 @@ img {
   justify-content: flex-end;
 }
 
-/* Botão em Gradiente Azul-Roxo */
 .btn-ev-modal-subscribe-gradient {
   background: linear-gradient(90deg, #0052ff 0%, #a855f7 100%);
   color: #fff;
@@ -1513,11 +1495,10 @@ img {
   transform: translateX(4px);
 }
 
-/* Badge de Inscrito de Sucesso */
 .ev-subscribed-msg {
   background: rgba(34, 197, 94, 0.08);
   border: 1px solid rgba(34, 197, 94, 0.2);
-  color: #166534; /* Verde floresta escuro para contraste no branco */
+  color: #166534;
   padding: 12px 24px;
   border-radius: 50px;
   font-weight: 700;
@@ -1528,28 +1509,23 @@ img {
   box-shadow: 0 4px 12px rgba(34, 197, 94, 0.05);
 }
 
-/* Responsividade do Modal Claro */
 @media (max-width: 992px) {
   .ev-modal-container {
     padding: 25px;
     max-width: 620px;
     width: 95%;
   }
- 
   .ev-modal-content-wrapper {
     flex-direction: column;
     gap: 20px;
   }
- 
   .ev-modal-left, .ev-modal-right {
     width: 100%;
   }
- 
   .ev-modal-image-container {
     height: 200px;
     min-height: 200px;
   }
- 
   .ev-modal-title {
     font-size: 1.6rem;
   }
@@ -1561,20 +1537,282 @@ img {
     max-height: 90vh;
     overflow-y: auto;
   }
- 
   .ev-modal-highlights-list {
-    grid-template-columns: 1fr; /* 1 coluna no mobile para não esmagar */
+    grid-template-columns: 1fr;
     gap: 12px;
     padding: 15px;
   }
- 
   .btn-ev-modal-subscribe-gradient {
     width: 100%;
     justify-content: center;
   }
- 
   .ev-subscribed-msg {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* ==========================================================
+   PAINEL DE CONTROLE DO ADMINISTRADOR (ESTILOS DA HOME ADMIN)
+   ========================================================== */
+.admin-home-section {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  font-family: var(--font-main);
+}
+
+.admin-welcome-banner {
+  background: linear-gradient(135deg, rgba(12, 19, 44, 0.9) 0%, rgba(7, 11, 25, 0.95) 100%);
+  border: 1px solid var(--border-glow);
+  border-radius: 28px;
+  padding: 3.5rem;
+  margin-bottom: 3.5rem;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(99, 102, 241, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-welcome-banner::before {
+  content: "";
+  position: absolute;
+  right: -5%;
+  top: -10%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(rgba(139, 92, 246, 0.15), transparent 70%);
+  filter: blur(50px);
+}
+
+.welcome-tag {
+  color: var(--accent-cyan);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.admin-welcome-banner h1 {
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin-bottom: 1.2rem;
+  line-height: 1.2;
+}
+
+.admin-welcome-banner p {
+  color: var(--text-light-muted);
+  font-size: 1.1rem;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.admin-section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-light);
+}
+
+.admin-section-title i {
+  color: var(--primary-purple);
+}
+
+/* Painel de Estatísticas */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.75rem;
+  margin-bottom: 3.5rem;
+}
+
+.admin-stat-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-glow);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.admin-stat-card .stat-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.card-blue-glow:hover {
+  border-color: rgba(0, 82, 255, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 82, 255, 0.15);
+}
+.card-blue-glow .stat-icon {
+  background: rgba(0, 82, 255, 0.15);
+  color: #60a5fa;
+}
+
+.card-purple-glow:hover {
+  border-color: rgba(157, 78, 221, 0.4);
+  box-shadow: 0 10px 25px rgba(157, 78, 221, 0.15);
+}
+.card-purple-glow .stat-icon {
+  background: rgba(157, 78, 221, 0.15);
+  color: #c084fc;
+}
+
+.card-pink-glow:hover {
+  border-color: rgba(255, 0, 127, 0.4);
+  box-shadow: 0 10px 25px rgba(255, 0, 127, 0.15);
+}
+.card-pink-glow .stat-icon {
+  background: rgba(255, 0, 127, 0.15);
+  color: #f472b6;
+}
+
+.card-cyan-glow:hover {
+  border-color: rgba(0, 240, 255, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 240, 255, 0.15);
+}
+.card-cyan-glow .stat-icon {
+  background: rgba(0, 240, 255, 0.15);
+  color: #22d3ee;
+}
+
+.admin-stat-card .stat-info h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+
+.admin-stat-card .stat-info p {
+  font-size: 0.85rem;
+  color: var(--text-light-muted);
+  font-weight: 500;
+}
+
+/* Grade de Ações Rápidas */
+.admin-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.admin-action-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid var(--border-glow);
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-smooth);
+}
+
+.admin-action-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.action-card-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
+.action-card-icon.icon-blue {
+  background: rgba(0, 82, 255, 0.1);
+  color: #3b82f6;
+}
+.action-card-icon.icon-purple {
+  background: rgba(157, 78, 221, 0.1);
+  color: #a855f7;
+}
+.action-card-icon.icon-pink {
+  background: rgba(236, 72, 153, 0.1);
+  color: #ec4899;
+}
+
+.admin-action-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.admin-action-card p {
+  font-size: 0.9rem;
+  color: var(--text-light-muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+  flex: 1;
+}
+
+.btn-action-go {
+  margin-top: auto;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text-light);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+}
+
+.btn-action-go i {
+  font-size: 0.8rem;
+  transition: var(--transition-smooth);
+}
+
+.admin-action-card:hover .btn-action-go {
+  color: var(--accent-cyan);
+}
+
+.admin-action-card:hover .btn-action-go i {
+  transform: translateX(4px);
+}
+
+/* Responsividade do Painel Admin */
+@media (max-width: 1024px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .admin-actions-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .admin-welcome-banner {
+    padding: 2rem;
+  }
+  .admin-welcome-banner h1 {
+    font-size: 2rem;
   }
 }
