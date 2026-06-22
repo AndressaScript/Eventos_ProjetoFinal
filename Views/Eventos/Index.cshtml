@@ -90,7 +90,7 @@
                         }
                         else if (item.NomeEvento.Contains("IA", StringComparison.OrdinalIgnoreCase) ||
                                  item.NomeEvento.Contains("Inteligência", StringComparison.OrdinalIgnoreCase) ||
-                                 item.TipoEvento.Contains("IA", StringComparison.OrdinalIgnoreCase))
+                                  item.TipoEvento.Contains("IA", StringComparison.OrdinalIgnoreCase))
                         {
                             iconClass = "fa-solid fa-brain";
                             colorClass = "icon-pink";
@@ -112,7 +112,18 @@
                             <div class="event-col-speaker">@item.NomePalestrante</div>
 
                             <div class="event-col-status">
-                                <span class="badge-status-active">@item.StatusEvento</span>
+                                @{
+                                    string badgeClass = "badge-status-active";
+                                    if (item.StatusEvento == "Inativo")
+                                    {
+                                        badgeClass = "badge-status-inactive";
+                                    }
+                                    else if (item.StatusEvento == "Pendente")
+                                    {
+                                        badgeClass = "badge-status-pending";
+                                    }
+                                }
+                                <span class="@badgeClass">@item.StatusEvento</span>
                             </div>
 
                             <!-- Botões de Ação -->

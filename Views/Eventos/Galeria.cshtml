@@ -90,11 +90,15 @@
                     {
                         // Resgata a contagem de fotos do Dictionary
                         int totalFotos = contagemFotos.ContainsKey(item.EventoID) ? contagemFotos[item.EventoID] : 0;
-                        string capaAlbum = Url.Content("~/img/galeria_eventos_1.png");
                        
-                        // Busca capas dinâmicas baseadas no nome se não houver fotos
-                        if (item.NomeEvento.Contains("Mulher", StringComparison.OrdinalIgnoreCase)) capaAlbum = Url.Content("~/img/galeria_eventos_3.png");
-                        else if (item.NomeEvento.Contains("Hall", StringComparison.OrdinalIgnoreCase)) capaAlbum = Url.Content("~/img/galeria_eventos_2.png");
+                        // Lógica de Capa Real do Evento com fallback inteligente
+                        string category = item.TipoEvento.ToUpper();
+                        string defaultImage = category == "WORKSHOP" ? "card_workshop.png" : "card_palestra.png";
+                        if (item.NomeEvento.Contains("IoT", StringComparison.OrdinalIgnoreCase)) defaultImage = "card_IOT.png";
+
+                        string capaAlbum = string.IsNullOrEmpty(item.ImagemUrl)
+                            ? Url.Content("~/img/" + defaultImage)
+                            : item.ImagemUrl;
 
                         <div class="album-card" id="card-@item.EventoID">
                             <div class="album-img-wrapper">
@@ -185,6 +189,15 @@ else
                 <p class="admin-subtitle">Confira os momentos marcantes e envie fotos das suas experiências.</p>
             </div>
 
+            @if (TempData["Sucesso"] != null)
+            {
+                <div class="alert alert-success">@TempData["Sucesso"]</div>
+            }
+            @if (TempData["Erro"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Erro"]</div>
+            }
+
             <!-- Grid da Galeria (Mesmo visual sem contorno fixo) -->
             <div class="gallery-grid-admin">
                 @if (Model != null && Model.Any())
@@ -192,9 +205,15 @@ else
                     @foreach (var item in Model)
                     {
                         int totalFotos = contagemFotos.ContainsKey(item.EventoID) ? contagemFotos[item.EventoID] : 0;
-                        string capaAlbum = Url.Content("~/img/galeria_eventos_1.png");
-                        if (item.NomeEvento.Contains("Mulher", StringComparison.OrdinalIgnoreCase)) capaAlbum = Url.Content("~/img/galeria_eventos_3.png");
-                        else if (item.NomeEvento.Contains("Hall", StringComparison.OrdinalIgnoreCase)) capaAlbum = Url.Content("~/img/galeria_eventos_2.png");
+                       
+                        // Lógica de Capa Real do Evento com fallback inteligente
+                        string category = item.TipoEvento.ToUpper();
+                        string defaultImage = category == "WORKSHOP" ? "card_workshop.png" : "card_palestra.png";
+                        if (item.NomeEvento.Contains("IoT", StringComparison.OrdinalIgnoreCase)) defaultImage = "card_IOT.png";
+
+                        string capaAlbum = string.IsNullOrEmpty(item.ImagemUrl)
+                            ? Url.Content("~/img/" + defaultImage)
+                            : item.ImagemUrl;
 
                         <div class="album-card" id="card-@item.EventoID">
                             <div class="album-img-wrapper">
@@ -518,6 +537,19 @@ else
             if (activeId) {
                 const card = document.getElementById("card-" + activeId);
                 if (card) card.classList.add("selected-album-card");
+            }
+
+            // ==========================================================================
+            // FECHAMENTO AUTOMÁTICO DO ALERTA APÓS 5 SEGUNDOS (FADE-OUT SUAVE)
+            // ==========================================================================
+            const alertEl = document.querySelector(".alert");
+            if (alertEl) {
+                setTimeout(() => {
+                    alertEl.style.transition = "opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s ease";
+                    alertEl.style.opacity = "0";
+                    alertEl.style.transform = "translateY(-10px)";
+                    setTimeout(() => alertEl.remove(), 600);
+                }, 5000);
             }
         });
     </script>

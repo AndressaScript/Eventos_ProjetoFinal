@@ -17,11 +17,13 @@ namespace Eventos_ProjetoFinal.Controllers
     {
         private readonly IEventosService _service;
         private readonly BdDbContext _context;
+        private readonly IModeracaoService _moderacao; // Injeção da IA de Moderação
 
-        public EventosController(IEventosService service, BdDbContext context)
+        public EventosController(IEventosService service, BdDbContext context, IModeracaoService moderacao)
         {
             _service = service;
             _context = context;
+            _moderacao = moderacao;
         }
 
         // Filtro de Autorização
@@ -76,53 +78,14 @@ namespace Eventos_ProjetoFinal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Cadastrar(Eventos novoEvento, IFormFile? imagemArquivo, string horaInput)
+        public async Task<IActionResult> Cadastrar(Eventos novoEvento)
         {
             ModelState.Remove("AdminID");
-            ModelState.Remove("HorarioEvento"); // Validação manual no servidor
-
-            // Combina DataEvento (DateOnly) com horaInput (TimeOnly) para formar o HorarioEvento (DateTime)
-            if (TimeOnly.TryParse(horaInput, out TimeOnly time))
-            {
-                novoEvento.HorarioEvento = novoEvento.DataEvento.ToDateTime(time);
-            }
-            else
-            {
-                ModelState.AddModelError("HorarioEvento", "Horário de início inválido.");
-            }
-
             if (ModelState.IsValid)
             {
                 if (int.TryParse(HttpContext.Session.GetString("UsuarioId"), out int adminId))
                 {
                     novoEvento.AdminID = adminId;
-
-                    // Salva a imagem do banner do evento se tiver sido enviada
-                    if (imagemArquivo != null && imagemArquivo.Length > 0)
-                    {
-                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "eventos");
-                        if (!Directory.Exists(uploadsFolder))
-                        {
-                            Directory.CreateDirectory(uploadsFolder);
-                        }
-
-                        var ext = Path.GetExtension(imagemArquivo.FileName).ToLower();
-                        var uniqueFileName = Guid.NewGuid().ToString() + ext;
-                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await imagemArquivo.CopyToAsync(stream);
-                        }
-
-                        novoEvento.ImagemUrl = "/uploads/eventos/" + uniqueFileName;
-                    }
-                    else
-                    {
-                        // Imagem padrão caso o admin não envie nenhuma
-                        novoEvento.ImagemUrl = "/img/card_workshop.png";
-                    }
-
                     await _service.Criar(novoEvento);
                     return RedirectToAction("Index");
                 }
@@ -143,57 +106,14 @@ namespace Eventos_ProjetoFinal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Editar(Eventos evento, IFormFile? imagemArquivo, string horaInput)
+        public async Task<IActionResult> Editar(Eventos evento)
         {
              ModelState.Remove("AdminID");
-             ModelState.Remove("HorarioEvento"); // Validação manual no servidor
-
-             // Combina DataEvento (DateOnly) com horaInput (TimeOnly) para formar o HorarioEvento (DateTime)
-             if (TimeOnly.TryParse(horaInput, out TimeOnly time))
-             {
-                 evento.HorarioEvento = evento.DataEvento.ToDateTime(time);
-             }
-             else
-             {
-                 ModelState.AddModelError("HorarioEvento", "Horário de início inválido.");
-             }
-
              if (ModelState.IsValid)
              {
                   if (int.TryParse(HttpContext.Session.GetString("UsuarioId"), out int adminId))
                   {
                       evento.AdminID = adminId;
-
-                      // Salva a nova imagem do banner se tiver sido enviada
-                      if (imagemArquivo != null && imagemArquivo.Length > 0)
-                      {
-                          var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "eventos");
-                          if (!Directory.Exists(uploadsFolder))
-                          {
-                              Directory.CreateDirectory(uploadsFolder);
-                          }
-
-                          var ext = Path.GetExtension(imagemArquivo.FileName).ToLower();
-                          var uniqueFileName = Guid.NewGuid().ToString() + ext;
-                          var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                          using (var stream = new FileStream(filePath, FileMode.Create))
-                          {
-                              await imagemArquivo.CopyToAsync(stream);
-                          }
-
-                          evento.ImagemUrl = "/uploads/eventos/" + uniqueFileName;
-                      }
-                      else
-                      {
-                          // Se não enviou imagem nova, preserva a imagem existente no banco
-                          var eventoExistente = await _context.Eventos.AsNoTracking().FirstOrDefaultAsync(e => e.EventoID == evento.EventoID);
-                          if (eventoExistente != null)
-                          {
-                              evento.ImagemUrl = eventoExistente.ImagemUrl;
-                          }
-                      }
-
                       await _service.Atualizar(evento);
                       return RedirectToAction("Index");
                   }
@@ -210,7 +130,7 @@ namespace Eventos_ProjetoFinal.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Exibe a Galeria de Eventos
+        // GET: Exibe a Galeria de Eventos (Mais leve, não carrega fotos aqui!)
         public async Task<IActionResult> Galeria()
         {
             var hoje = DateOnly.FromDateTime(DateTime.Today);
@@ -244,18 +164,21 @@ namespace Eventos_ProjetoFinal.Controllers
 
             ViewBag.EventosDisponiveis = eventosDisponiveisParaUpload;
 
+            // Busca as fotos apenas para contar a quantidade em cada álbum de forma leve
             var contagemFotos = await _context.Galeria
                 .GroupBy(g => g.EventoID)
                 .Select(g => new { EventoID = g.Key, Count = g.Count() })
                 .ToDictionaryAsync(x => x.EventoID, x => x.Count);
 
             ViewBag.ContagemFotos = contagemFotos;
+
+            // Estatística rápida de álbuns criados
             ViewBag.QtdAlbuns = contagemFotos.Count(x => x.Value > 0);
 
             return View(eventosPassados);
         }
 
-        // GET: Nova Página Dedicada para ver as fotos
+        // GET: Nova Página Dedicada para ver as fotos de um Evento Específico
         [HttpGet]
         public async Task<IActionResult> Visualizar(int id)
         {
@@ -272,7 +195,7 @@ namespace Eventos_ProjetoFinal.Controllers
             return View(fotos);
         }
 
-        // POST: Faz o Upload de múltiplas fotos
+        // POST: Faz o Upload de múltiplas fotos (COM MODERAÇÃO DA IA ATIVA)
         [HttpPost]
         public async Task<IActionResult> UploadFotos(int eventoId, List<IFormFile> imagens, List<string> legendas)
         {
@@ -284,6 +207,7 @@ namespace Eventos_ProjetoFinal.Controllers
                 return RedirectToAction("Index", "Login");
             }
 
+            // Regra de Aluno: Precisa ter participado e as imagens passam pela moderação por IA
             if (role == "Aluno")
             {
                 var participou = await _context.Inscricao
@@ -293,6 +217,20 @@ namespace Eventos_ProjetoFinal.Controllers
                 {
                     TempData["Erro"] = "Você só pode enviar fotos de eventos nos quais participou.";
                     return RedirectToAction("Galeria");
+                }
+
+                // 🌟 MODERAÇÃO EM LOOP COM INTELIGÊNCIA ARTIFICIAL (GOOGLE VISION API)
+                if (imagens != null && imagens.Any())
+                {
+                    foreach (var imagem in imagens)
+                    {
+                        bool seguro = await _moderacao.EConteudoSeguro(imagem);
+                        if (!seguro)
+                        {
+                            TempData["Erro"] = "Upload cancelado: Uma ou mais imagens violam as diretrizes de conteúdo (conteúdo impróprio ou ofensivo).";
+                            return RedirectToAction("Galeria");
+                        }
+                    }
                 }
             }
 

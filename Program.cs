@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//config session 
+//config session
 builder.Services.AddSession(options =>
 {
 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -25,6 +25,9 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 builder.Services.AddScoped<IEventosRepository, EventosRepository>();
 builder.Services.AddScoped<IEventosService, EventosService>();
+
+builder.Services.AddScoped<IModeracaoService, ModeracaoService>();
+
 
 var app = builder.Build();
 
@@ -53,7 +56,7 @@ app.MapControllerRoute(
 
 
 // =================================================================
-// SEED DE EVENTOS DE TESTE (Para a Galeria de Fotos)
+// SEED E LIMPEZA DE EVENTOS DE TESTE (Para a Galeria de Fotos)
 // =================================================================
 using (var scope = app.Services.CreateScope())
 {
@@ -61,7 +64,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<BdDbContext>();
-        
+       
         // Garante que o banco existe e está criado
         context.Database.EnsureCreated();
 
@@ -81,44 +84,22 @@ using (var scope = app.Services.CreateScope())
             }
         }
 
-        // 1. Seed: Dia das Mulheres (Data no passado: 08/03/2026)
-        if (!context.Eventos.Any(e => e.NomeEvento == "Dia das Mulheres"))
+        // 1. Limpeza automática de dados antigos do Seed (para sincronizar o banco de dados)
+        var eventoMulheresVelho = context.Eventos.FirstOrDefault(e => e.NomeEvento == "Dia das Mulheres" && e.CargaHorariaEvento == "2 horas");
+        if (eventoMulheresVelho != null)
         {
-            context.Eventos.Add(new Eventos
-            {
-                NomeEvento = "Dia das Mulheres",
-                TipoEvento = "Palestra",
-                LocalEvento = "Auditório Central",
-                CapacidadeEvento = 150,
-                DataEvento = new DateOnly(2026, 3, 8),
-                HorarioEvento = new DateTime(2026, 3, 8, 14, 0, 0),
-                CargaHorariaEvento = "2 horas",
-                StatusEvento = "Ativo",
-                NomePalestrante = "Jane Cruz",
-                AdminID = adminId
-            });
+            context.Eventos.Remove(eventoMulheresVelho);
         }
 
-        // 2. Seed: Jhon Hall (Data no passado: 10/04/2026)
-        if (!context.Eventos.Any(e => e.NomeEvento == "Jhon Hall"))
+        var eventoJhonHallVelho = context.Eventos.FirstOrDefault(e => e.NomeEvento == "Jhon Hall");
+        if (eventoJhonHallVelho != null)
         {
-            context.Eventos.Add(new Eventos
-            {
-                NomeEvento = "Jhon Hall",
-                TipoEvento = "Workshop",
-                LocalEvento = "Laboratório de Redes",
-                CapacidadeEvento = 60,
-                DataEvento = new DateOnly(2026, 4, 10),
-                HorarioEvento = new DateTime(2026, 4, 10, 16, 0, 0),
-                CargaHorariaEvento = "4 horas",
-                StatusEvento = "Ativo",
-                NomePalestrante = "Alphonso Correa",
-                AdminID = adminId
-            });
+            context.Eventos.Remove(eventoJhonHallVelho);
         }
 
-        // 3. Seed: Outubro Rosa (Data no passado: 23/10/2025)
-        if (!context.Eventos.Any(e => e.NomeEvento == "Outubro Rosa"))
+        // 2. Seed do Outubro Rosa: Mantido como único evento passado e configurado com capa fixa e status INATIVO
+        var eventoOutubro = context.Eventos.FirstOrDefault(e => e.NomeEvento == "Outubro Rosa");
+        if (eventoOutubro == null)
         {
             context.Eventos.Add(new Eventos
             {
@@ -129,14 +110,21 @@ using (var scope = app.Services.CreateScope())
                 DataEvento = new DateOnly(2025, 10, 23),
                 HorarioEvento = new DateTime(2025, 10, 23, 19, 0, 0),
                 CargaHorariaEvento = "3 horas",
-                StatusEvento = "Ativo",
+                StatusEvento = "Inativo", // Força o status como Inativo (vermelho)
                 NomePalestrante = "Vários",
-                AdminID = adminId
+                AdminID = adminId,
+                ImagemUrl = "/img/mulheres.png"
             });
+        }
+        else
+        {
+            // Força a inativação e a imagem fixa se ele já existir no banco do usuário
+            eventoOutubro.StatusEvento = "Inativo";
+            eventoOutubro.ImagemUrl = "/img/mulheres.png" ;
         }
 
         context.SaveChanges();
-        Console.WriteLine(">> Seed executado com sucesso: 3 eventos passados adicionados!");
+        Console.WriteLine(">> Seed do banco de dados atualizado: Apenas 'Outubro Rosa' mantido como Inativo e com Capa Fixa!");
     }
     catch (Exception ex)
     {

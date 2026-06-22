@@ -1624,12 +1624,15 @@ img {
   color: var(--primary-purple);
 }
 
-/* Painel de Estatísticas */
+/* Procure por .admin-stats-grid e substitua por este bloco completo: */
 .admin-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr); /* Mudado de 4 para 3 colunas */
   gap: 1.75rem;
   margin-bottom: 3.5rem;
+  max-width: 1200px; /* Limita a largura para não esticar demais */
+  margin-left: auto;  /* Centraliza na tela */
+  margin-right: auto; /* Centraliza na tela */
 }
 
 .admin-stat-card {
