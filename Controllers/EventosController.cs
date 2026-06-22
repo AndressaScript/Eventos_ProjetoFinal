@@ -78,14 +78,54 @@ namespace Eventos_ProjetoFinal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Cadastrar(Eventos novoEvento)
+        public async Task<IActionResult> Cadastrar(Eventos novoEvento, string horaInput, IFormFile? imagemArquivo)
         {
             ModelState.Remove("AdminID");
+            ModelState.Remove("HorarioEvento");
+
+            // Mescla a Data (DateOnly) com o Horário (string)
+            if (TimeSpan.TryParse(horaInput, out var time))
+            {
+                novoEvento.HorarioEvento = new DateTime(
+                    novoEvento.DataEvento.Year,
+                    novoEvento.DataEvento.Month,
+                    novoEvento.DataEvento.Day,
+                    time.Hours,
+                    time.Minutes,
+                    0
+                );
+            }
+            else
+            {
+                ModelState.AddModelError("HorarioEvento", "O horário selecionado é inválido.");
+            }
+
             if (ModelState.IsValid)
             {
                 if (int.TryParse(HttpContext.Session.GetString("UsuarioId"), out int adminId))
                 {
                     novoEvento.AdminID = adminId;
+
+                    // Upload do Banner se fornecido
+                    if (imagemArquivo != null && imagemArquivo.Length > 0)
+                    {
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(imagemArquivo.FileName);
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imagemArquivo.CopyToAsync(stream);
+                        }
+
+                        novoEvento.ImagemUrl = "/uploads/" + uniqueFileName;
+                    }
+
                     await _service.Criar(novoEvento);
                     return RedirectToAction("Index");
                 }
@@ -106,14 +146,63 @@ namespace Eventos_ProjetoFinal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Editar(Eventos evento)
+        public async Task<IActionResult> Editar(Eventos evento, string horaInput, IFormFile? imagemArquivo)
         {
              ModelState.Remove("AdminID");
+             ModelState.Remove("HorarioEvento");
+
+             // Mescla a Data (DateOnly) com o Horário (string)
+             if (TimeSpan.TryParse(horaInput, out var time))
+             {
+                 evento.HorarioEvento = new DateTime(
+                     evento.DataEvento.Year,
+                     evento.DataEvento.Month,
+                     evento.DataEvento.Day,
+                     time.Hours,
+                     time.Minutes,
+                     0
+                 );
+             }
+             else
+             {
+                 ModelState.AddModelError("HorarioEvento", "O horário selecionado é inválido.");
+             }
+
              if (ModelState.IsValid)
              {
                   if (int.TryParse(HttpContext.Session.GetString("UsuarioId"), out int adminId))
                   {
                       evento.AdminID = adminId;
+
+                      // Upload do Banner se fornecido
+                      if (imagemArquivo != null && imagemArquivo.Length > 0)
+                      {
+                          var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                          if (!Directory.Exists(uploadsFolder))
+                          {
+                              Directory.CreateDirectory(uploadsFolder);
+                          }
+
+                          var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(imagemArquivo.FileName);
+                          var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                          using (var stream = new FileStream(filePath, FileMode.Create))
+                          {
+                              await imagemArquivo.CopyToAsync(stream);
+                          }
+
+                          evento.ImagemUrl = "/uploads/" + uniqueFileName;
+                      }
+                      else
+                      {
+                          // Preserva a ImagemUrl antiga se não foi enviada uma nova
+                          var eventoOriginal = await _context.Eventos.AsNoTracking().FirstOrDefaultAsync(e => e.EventoID == evento.EventoID);
+                          if (eventoOriginal != null)
+                          {
+                              evento.ImagemUrl = eventoOriginal.ImagemUrl;
+                          }
+                      }
+
                       await _service.Atualizar(evento);
                       return RedirectToAction("Index");
                   }
