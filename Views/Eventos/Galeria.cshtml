@@ -2,20 +2,24 @@
 @{
     ViewData["Title"] = "Galeria de Eventos";
     bool isAdmin = Context.Session.GetString("Role") == "Admin";
+    var eventosDisponiveis = ViewBag.EventosDisponiveis as List<Eventos_ProjetoFinal.Models.Eventos> ?? new List<Eventos_ProjetoFinal.Models.Eventos>();
+    var contagemFotos = ViewBag.ContagemFotos as Dictionary<int, int> ?? new Dictionary<int, int>();
+    int qtdAlbuns = ViewBag.QtdAlbuns ?? 0;
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/padrao.css" />
     <link rel="stylesheet" href="~/css/header.css" />
     <link rel="stylesheet" href="~/css/aside.css" />
-    <link rel="stylesheet" href="~/css/listaEventos.css" />
-    @if (!isAdmin)
-    {
-        <link rel="stylesheet" href="~/css/home.css" />
-    }
+    <link rel="stylesheet" href="~/css/listaEventos.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/cadastroEvento.css" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 }
+
 @if (isAdmin)
 {
-    <!-- Topbar Administrativa com link corrigido na Logo -->
+    <!-- =================================================================
+         VISÃO DO ADMINISTRADOR
+         ================================================================= -->
     <header class="admin-topbar-new">
         <div class="logo-senai-admin">
             <a asp-controller="Home" asp-action="Index">
@@ -43,20 +47,13 @@
                 </a>
             </nav>
            
-            <!-- Cards de Estatísticas na base da Sidebar -->
+            <!-- Três Cards Verticais Dinâmicos na Sidebar -->
             <div class="sidebar-stats-section">
                 <div class="stat-card-aside card-blue-glow">
-                    <div class="stat-card-icon"><i class="fa-regular fa-calendar-check"></i></div>
+                    <div class="stat-card-icon"><i class="fa-regular fa-images"></i></div>
                     <div class="stat-card-info">
-                        <span class="stat-card-label">Eventos Ativos:</span>
-                        <span class="stat-card-value">@Model.Count(e => e.StatusEvento == "Ativo")</span>
-                    </div>
-                </div>
-                <div class="stat-card-aside card-purple-glow">
-                    <div class="stat-card-icon"><i class="fa-solid fa-users"></i></div>
-                    <div class="stat-card-info">
-                        <span class="stat-card-label">Novos Palestrantes:</span>
-                        <span class="stat-card-value">@Model.Select(e => e.NomePalestrante).Distinct().Count()</span>
+                        <span class="stat-card-label">Álbuns Criados</span>
+                        <span class="stat-card-value">@qtdAlbuns</span>
                     </div>
                 </div>
             </div>
@@ -71,38 +68,38 @@
                         <h1 class="admin-page-title">Galeria de Eventos</h1>
                         <span class="title-gradient-line"></span>
                     </div>
-                    <a href="#" class="btn-new-event-glow">+ Novo Álbum de Fotos</a>
+                    <button type="button" class="btn-new-event-glow" id="btnOpenUploadModal">+ Adicionar Fotos</button>
                 </div>
                 <p class="admin-subtitle">Confira os momentos que conectam conhecimento e oportunidades.</p>
             </div>
 
-            <!-- Grid da Galeria (3 Colunas) -->
+            @if (TempData["Sucesso"] != null)
+            {
+                <div class="alert alert-success">@TempData["Sucesso"]</div>
+            }
+            @if (TempData["Erro"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Erro"]</div>
+            }
+
+            <!-- Grid da Galeria (Carregamento das capas) -->
             <div class="gallery-grid-admin">
                 @if (Model != null && Model.Any())
                 {
-                    bool isFirst = true;
                     @foreach (var item in Model)
                     {
-                        string albumImage = "galeria_eventos_1.png";
-                        if (item.NomeEvento.Contains("Mulher", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Mulheres", StringComparison.OrdinalIgnoreCase))
-                        {
-                            albumImage = "galeria_eventos_3.png";
-                        }
-                        else if (item.NomeEvento.Contains("Hall", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Jhon", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("FIESP", StringComparison.OrdinalIgnoreCase))
-                        {
-                            albumImage = "galeria_eventos_2.png";
-                        }
-                        else if (item.NomeEvento.Contains("Rosa", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Outubro", StringComparison.OrdinalIgnoreCase))
-                        {
-                            albumImage = "galeria_eventos_1.png";
-                        }
+                        // Resgata a contagem de fotos do Dictionary
+                        int totalFotos = contagemFotos.ContainsKey(item.EventoID) ? contagemFotos[item.EventoID] : 0;
+                        string capaAlbum = Url.Content("~/img/galeria_eventos_1.png");
                        
-                        string highlightClass = isFirst ? "highlight-album-card" : "";
-                        isFirst = false;
-                       
-                        <div class="album-card @highlightClass">
+                        // Busca capas dinâmicas baseadas no nome se não houver fotos
+                        if (item.NomeEvento.Contains("Mulher", StringComparison.OrdinalIgnoreCase)) capaAlbum = Url.Content("~/img/galeria_eventos_3.png");
+                        else if (item.NomeEvento.Contains("Hall", StringComparison.OrdinalIgnoreCase)) capaAlbum = Url.Content("~/img/galeria_eventos_2.png");
+
+                        <div class="album-card" id="card-@item.EventoID">
                             <div class="album-img-wrapper">
-                                <img src="~/img/@albumImage" alt="@item.NomeEvento" />
+                                <img src="@capaAlbum" alt="@item.NomeEvento" />
+                                <span class="photos-count-badge"><i class="fa-solid fa-camera"></i> @totalFotos</span>
                             </div>
                             <div class="album-body">
                                 <h3>@item.NomeEvento</h3>
@@ -117,7 +114,10 @@
                                     </div>
                                 </div>
                                 <div class="album-action-row">
-                                    <a href="#" class="btn-view-photos">Ver Fotos <i class="fa-solid fa-arrow-right"></i></a>
+                                    <!-- REDIRECIONAMENTO LIMPO E SEGURO SEM JS -->
+                                    <a asp-controller="Eventos" asp-action="Visualizar" asp-route-id="@item.EventoID" class="btn-view-photos">
+                                        Ver Fotos <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +138,9 @@
 }
 else
 {
-    <!-- Header do Portal (Público) -->
+    <!-- =================================================================
+         VISÃO DO ALUNO (PORTAL PÚBLICO)
+         ================================================================= -->
     <header class="header">
         <div class="header-container">
             <div class="logo-container">
@@ -168,48 +170,36 @@ else
         </div>
     </header>
 
-    <!-- Conteúdo Principal Centralizado e Expandido -->
     <main class="public-gallery-main" style="padding-top: 130px; padding-bottom: 100px; background-color: #050814; min-height: 100vh;">
         <div class="public-gallery-container" style="max-width: 1300px; margin: 0 auto; padding: 0 2rem; display: flex; flex-direction: column; gap: 3rem;">
            
             <div class="content-header-new">
                 <div class="breadcrumb-new">Início > <span style="color: #d946ef; font-weight: bold;">Galeria de Eventos</span></div>
-                <div class="title-row-new" style="margin-bottom: 0.5rem;">
+                <div class="title-row-new" style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
                     <div class="title-block-new">
-                        <h1 class="admin-page-title">Galeria de Eventos</h1>
+                        <h1 class="admin-page-title" style="color: white;">Galeria de Eventos</h1>
                         <span class="title-gradient-line" style="background: linear-gradient(90deg, #0052ff 0%, #d946ef 100%); width: 120px;"></span>
                     </div>
+                    <button type="button" class="btn-new-event-glow" id="btnOpenUploadModal">+ Adicionar Fotos</button>
                 </div>
-                <p class="admin-subtitle">Confira os momentos que conectam conhecimento e oportunidades.</p>
+                <p class="admin-subtitle">Confira os momentos marcantes e envie fotos das suas experiências.</p>
             </div>
 
-            <!-- Grid da Galeria (Mesmo Grid de 3 Colunas) -->
+            <!-- Grid da Galeria (Mesmo visual sem contorno fixo) -->
             <div class="gallery-grid-admin">
                 @if (Model != null && Model.Any())
                 {
-                    bool isFirst = true;
                     @foreach (var item in Model)
                     {
-                        string albumImage = "galeria_eventos_1.png";
-                        if (item.NomeEvento.Contains("Mulher", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Mulheres", StringComparison.OrdinalIgnoreCase))
-                        {
-                            albumImage = "galeria_eventos_3.png";
-                        }
-                        else if (item.NomeEvento.Contains("Hall", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Jhon", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("FIESP", StringComparison.OrdinalIgnoreCase))
-                        {
-                            albumImage = "galeria_eventos_2.png";
-                        }
-                        else if (item.NomeEvento.Contains("Rosa", StringComparison.OrdinalIgnoreCase) || item.NomeEvento.Contains("Outubro", StringComparison.OrdinalIgnoreCase))
-                        {
-                            albumImage = "galeria_eventos_1.png";
-                        }
-                       
-                        string highlightClass = isFirst ? "highlight-album-card" : "";
-                        isFirst = false;
-                       
-                        <div class="album-card @highlightClass">
+                        int totalFotos = contagemFotos.ContainsKey(item.EventoID) ? contagemFotos[item.EventoID] : 0;
+                        string capaAlbum = Url.Content("~/img/galeria_eventos_1.png");
+                        if (item.NomeEvento.Contains("Mulher", StringComparison.OrdinalIgnoreCase)) capaAlbum = Url.Content("~/img/galeria_eventos_3.png");
+                        else if (item.NomeEvento.Contains("Hall", StringComparison.OrdinalIgnoreCase)) capaAlbum = Url.Content("~/img/galeria_eventos_2.png");
+
+                        <div class="album-card" id="card-@item.EventoID">
                             <div class="album-img-wrapper">
-                                <img src="~/img/@albumImage" alt="@item.NomeEvento" />
+                                <img src="@capaAlbum" alt="@item.NomeEvento" />
+                                <span class="photos-count-badge"><i class="fa-solid fa-camera"></i> @totalFotos</span>
                             </div>
                             <div class="album-body">
                                 <h3>@item.NomeEvento</h3>
@@ -224,7 +214,10 @@ else
                                     </div>
                                 </div>
                                 <div class="album-action-row">
-                                    <a href="#" class="btn-view-photos">Ver Fotos <i class="fa-solid fa-arrow-right"></i></a>
+                                    <!-- REDIRECIONAMENTO LIMPO E SEGURO SEM JS -->
+                                    <a asp-controller="Eventos" asp-action="Visualizar" asp-route-id="@item.EventoID" class="btn-view-photos">
+                                        Ver Fotos <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -232,7 +225,7 @@ else
                 }
                 else
                 {
-                    <p class="no-albums-admin" style="color: white; text-align: center;">Nenhum evento realizado (passado) encontrado na galeria.</p>
+                    <p class="no-albums-admin" style="color: white; text-align: center;">Nenhum evento realizado encontrado na galeria.</p>
                 }
             </div>
 
@@ -285,4 +278,247 @@ else
             </div>
         </div>
     </footer>
+}
+
+<!-- =================================================================
+     MODAL DE UPLOAD DE FOTOS (Mantido com drag-and-drop funcionando)
+     ================================================================= -->
+<div id="uploadAlbumModal" class="ev-modal-overlay" style="display: none;">
+    <div class="ev-modal-container event-form-container" style="max-width: 1000px; padding: 2.5rem;">
+        <button class="ev-modal-close-btn" id="btnCloseUploadModal" type="button">&times;</button>
+       
+        <div style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(15, 23, 42, 0.08); padding-bottom: 10px;">
+            <div class="breadcrumb-new" style="color: #64748b; font-size: 0.85rem;">Início > Galeria de Eventos > <span style="color: #d946ef; font-weight: bold;">Adicionar Fotos</span></div>
+        </div>
+
+        <form id="uploadAlbumForm" asp-controller="Eventos" asp-action="UploadFotos" method="post" enctype="multipart/form-data">
+            <div class="ev-modal-content-wrapper">
+                <div class="ev-modal-left" style="gap: 20px;">
+                    <div class="input-field-group">
+                        <label for="ddlEvento">Selecione o Evento:</label>
+                        @if (eventosDisponiveis.Any())
+                        {
+                            <div class="select-wrapper">
+                                <select id="ddlEvento" name="eventoId" required>
+                                    <option value="" disabled selected>Escolha o evento...</option>
+                                    @foreach (var ev in eventosDisponiveis)
+                                    {
+                                        <option value="@ev.EventoID">@ev.NomeEvento (@ev.DataEvento.ToString("dd/MM/yyyy"))</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger" style="margin: 0; padding: 12px; font-size: 0.85rem; text-align: left;">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Você não possui eventos passados elegíveis para upload.
+                            </div>
+                        }
+                    </div>
+
+                    <div class="upload-box-wrapper" style="margin-top: 10px;">
+                        <div class="upload-box-dotted" id="dragDropArea" style="padding: 2.5rem 1.5rem;">
+                            <div class="upload-icon-circle">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+                            <span class="upload-title">Arraste suas fotos aqui ou</span>
+                            <span class="upload-subtitle">clique para selecionar</span>
+                            <small style="color: #94a3b8; font-size: 0.75rem; margin-top: 8px; display: block;">Máx. 10 arquivos, JPG/PNG, até 5MB cada</small>
+                            <input type="file" id="filesUploadInput" name="imagens" multiple accept="image/png, image/jpeg, image/jpg" style="display: none;" />
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 10px;">
+                        <button type="button" class="btn-cancel-light" id="btnCancelUpload" style="padding: 0.75rem 1.5rem; font-size: 0.85rem;">
+                            <i class="fa-solid fa-arrow-left"></i> Voltar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ev-modal-right" style="border-left: 1px solid rgba(15, 23, 42, 0.08); padding-left: 25px;">
+                    <h3 style="color: #0b132c; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Fotos do Álbum</span>
+                        <span id="photoCounter" style="font-size: 0.8rem; font-weight: 700; color: #8b5cf6;">0 selecionadas</span>
+                    </h3>
+                   
+                    <div id="previewPhotosContainer" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; overflow-y: auto; max-height: 250px; min-height: 180px; background: #f1f5f9; border-radius: 16px; border: 1px solid rgba(15, 23, 42, 0.06); padding: 12px;">
+                        <p id="placeholderPreviewText" style="grid-column: 1/-1; text-align: center; color: #94a3b8; margin: auto; font-size: 0.85rem;">
+                            As fotos selecionadas aparecerão aqui.
+                        </p>
+                    </div>
+
+                    <div class="form-submit-actions" style="margin-top: 20px; justify-content: flex-end; width: 100%;">
+                        <button type="button" class="btn-cancel-light" id="btnCancelUpload2" style="padding: 0.75rem 1.5rem; font-size: 0.85rem;">Cancelar</button>
+                        <button type="submit" class="btn-save-publish-dark" id="btnSubmitAlbum" disabled style="padding: 0.75rem 1.75rem; font-size: 0.85rem;">
+                            Publicar Fotos <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // ==========================================
+            // APENAS O FORMULÁRIO DE UPLOAD RODA EM JS (MODAL FÁCIL)
+            // ==========================================
+            const uploadAlbumModal = document.getElementById("uploadAlbumModal");
+            const btnOpenUploadModal = document.getElementById("btnOpenUploadModal");
+            const btnCloseUploadModal = document.getElementById("btnCloseUploadModal");
+            const btnCancelUpload = document.getElementById("btnCancelUpload");
+            const btnCancelUpload2 = document.getElementById("btnCancelUpload2");
+           
+            const dragDropArea = document.getElementById("dragDropArea");
+            const filesUploadInput = document.getElementById("filesUploadInput");
+            const previewContainer = document.getElementById("previewPhotosContainer");
+            const placeholderText = document.getElementById("placeholderPreviewText");
+            const photoCounter = document.getElementById("photoCounter");
+            const btnSubmitAlbum = document.getElementById("btnSubmitAlbum");
+            const ddlEvento = document.getElementById("ddlEvento");
+
+            let selectedFiles = [];
+
+            function toggleUploadModal(show) {
+                if (show) {
+                    uploadAlbumModal.style.display = "flex";
+                    setTimeout(() => uploadAlbumModal.classList.add("active"), 10);
+                } else {
+                    uploadAlbumModal.classList.remove("active");
+                    setTimeout(() => {
+                        uploadAlbumModal.style.display = "none";
+                        resetUploadForm();
+                    }, 300);
+                }
+            }
+
+            if (btnOpenUploadModal) {
+                btnOpenUploadModal.addEventListener("click", () => toggleUploadModal(true));
+            }
+            [btnCloseUploadModal, btnCancelUpload, btnCancelUpload2].forEach(btn => {
+                if (btn) btn.addEventListener("click", () => toggleUploadModal(false));
+            });
+
+            if (dragDropArea) {
+                dragDropArea.addEventListener("click", () => filesUploadInput.click());
+
+                ["dragenter", "dragover"].forEach(eventName => {
+                    dragDropArea.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        dragDropArea.style.borderColor = "#8b5cf6";
+                        dragDropArea.style.backgroundColor = "rgba(139, 92, 246, 0.05)";
+                    }, false);
+                });
+
+                ["dragleave", "drop"].forEach(eventName => {
+                    dragDropArea.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        dragDropArea.style.borderColor = "rgba(139, 92, 246, 0.25)";
+                        dragDropArea.style.backgroundColor = "rgba(139, 92, 246, 0.02)";
+                    }, false);
+                });
+
+                dragDropArea.addEventListener("drop", (e) => {
+                    const dt = e.dataTransfer;
+                    handleFiles(dt.files);
+                });
+            }
+
+            if (filesUploadInput) {
+                filesUploadInput.addEventListener("change", (e) => {
+                    handleFiles(e.target.files);
+                });
+            }
+
+            function handleFiles(files) {
+                if (files.length === 0) return;
+                const newImages = Array.from(files).filter(file => {
+                    const isValidType = file.type === "image/png" || file.type === "image/jpeg" || file.type === "image/jpg";
+                    const isValidSize = file.size <= 5 * 1024 * 1024;
+                    return isValidType && isValidSize;
+                });
+
+                if (selectedFiles.length + newImages.length > 10) {
+                    alert("Você pode subir no máximo 10 fotos por vez.");
+                    return;
+                }
+                newImages.forEach(file => selectedFiles.push(file));
+                updatePreviews();
+            }
+
+            function updatePreviews() {
+                if (!previewContainer) return;
+                previewContainer.innerHTML = "";
+               
+                if (selectedFiles.length === 0) {
+                    previewContainer.appendChild(placeholderText);
+                    if (photoCounter) photoCounter.textContent = "0 selecionadas";
+                    if (btnSubmitAlbum) btnSubmitAlbum.disabled = true;
+                    return;
+                }
+
+                if (photoCounter) photoCounter.textContent = `${selectedFiles.length} selecionada(s)`;
+                const isEventoSelected = ddlEvento ? ddlEvento.value !== "" : false;
+                if (btnSubmitAlbum) {
+                    btnSubmitAlbum.disabled = !(selectedFiles.length > 0 && isEventoSelected);
+                }
+
+                selectedFiles.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const previewItem = document.createElement("div");
+                        previewItem.className = "preview-photo-item";
+                        previewItem.style = "position: relative; display: flex; flex-direction: column; gap: 6px; border: 1px solid rgba(15, 23, 42, 0.08); border-radius: 12px; padding: 6px; background: white;";
+
+                        previewItem.innerHTML = `
+                            <div style="width: 100%; height: 90px; border-radius: 8px; overflow: hidden; position: relative;">
+                                <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;" />
+                                <button type="button" class="btn-remove-preview" data-index="${index}" style="position: absolute; top: 3px; right: 3px; background: rgba(239, 68, 68, 0.9); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">&times;</button>
+                            </div>
+                            <input type="text" name="legendas" placeholder="Legenda (opcional)" style="width: 100%; padding: 4px 8px; border: 1px solid rgba(15, 23, 42, 0.12); border-radius: 6px; font-size: 0.75rem; color: #0f172a;" />
+                        `;
+                        previewContainer.appendChild(previewItem);
+
+                        previewItem.querySelector(".btn-remove-preview").addEventListener("click", function () {
+                            const idxToRemove = parseInt(this.getAttribute("data-index"));
+                            selectedFiles.splice(idxToRemove, 1);
+                            const dt = new DataTransfer();
+                            selectedFiles.forEach(f => dt.items.add(f));
+                            if (filesUploadInput) filesUploadInput.files = dt.files;
+                            updatePreviews();
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            if (ddlEvento) {
+                ddlEvento.addEventListener("change", () => {
+                    const isEventoSelected = ddlEvento.value !== "";
+                    if (btnSubmitAlbum) {
+                        btnSubmitAlbum.disabled = !(selectedFiles.length > 0 && isEventoSelected);
+                    }
+                });
+            }
+
+            function resetUploadForm() {
+                selectedFiles = [];
+                if (ddlEvento) ddlEvento.selectedIndex = 0;
+                if (filesUploadInput) filesUploadInput.value = "";
+                updatePreviews();
+            }
+
+            // ==========================================
+            // INTERATIVIDADE DA SELEÇÃO DE CARD NA GALERIA
+            // ==========================================
+            // Mantém a borda brilhante rosa no card ativo antes de navegar
+            const activeId = new URLSearchParams(window.location.search).get("id");
+            if (activeId) {
+                const card = document.getElementById("card-" + activeId);
+                if (card) card.classList.add("selected-album-card");
+            }
+        });
+    </script>
 }

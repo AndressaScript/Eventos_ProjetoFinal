@@ -24,7 +24,7 @@ namespace Eventos_ProjetoFinal.Contexts
 
       public DbSet<Eventos> Eventos {get;set;} = null!;
 
-    //  public DbSet<Galeria> Galeria {get;set;} = null!;
+      public DbSet<Galeria> Galeria {get;set;} = null!;
 
     }
 

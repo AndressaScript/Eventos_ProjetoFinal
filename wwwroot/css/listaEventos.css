@@ -1,6 +1,3 @@
-/* =================================================================
-   LAYOUT DO PAINEL (Fundo Escuro e Container)
-   ================================================================= */
 .admin-dashboard-container {
     display: flex;
     min-height: 100vh;
@@ -27,7 +24,7 @@
 }
 
 .breadcrumb-new span {
-    color: #ffffff; 
+    color: #ffffff;
     font-weight: 500;
 }
 
@@ -282,4 +279,330 @@
     color: #94a3b8;
     padding: 3rem 0;
     font-size: 1.1rem;
+}
+
+/* =================================================================
+   NOVO: ESTILOS PREMIUM DOS ÁLBUNS E GRADE DA GALERIA (IGUAL AO GITHUB)
+   ================================================================= */
+.gallery-grid-admin {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    margin-top: 1.5rem;
+}
+
+/* Card Escuro de Álbum */
+.album-card {
+    background-color: #0c132c !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 20px !important;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.album-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+/* Borda Rosa Neon Glowing - ATIVADO APENAS VIA SELEÇÃO INTERATIVA DO JS */
+.album-card.selected-album-card {
+    border: 2px solid #d946ef !important;
+    box-shadow: 0 0 25px rgba(217, 70, 239, 0.4) !important;
+}
+
+/* Invólucro de imagem com tamanho fixo */
+.album-img-wrapper {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background-color: #050814;
+}
+
+.album-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+    transition: transform 0.3s ease;
+}
+
+.album-card:hover .album-img-wrapper img {
+    transform: scale(1.05);
+}
+
+/* Corpo do Card */
+.album-body {
+    padding: 1.5rem !important;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.album-body h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    margin: 0;
+}
+
+/* Lista de Metadados */
+.album-meta-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.album-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: #94a3b8 !important;
+}
+
+.album-meta-item i {
+    color: #d946ef;
+    font-size: 1rem;
+    width: 16px;
+    text-align: center;
+}
+
+/* Botão "Ver Fotos ->" com contorno fino */
+.album-action-row {
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
+.btn-open-album,
+.btn-view-photos {
+    background: transparent;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 0.65rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    width: fit-content;
+}
+
+.btn-open-album:hover,
+.btn-view-photos:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #d946ef !important;
+    box-shadow: 0 0 12px rgba(217, 70, 239, 0.2);
+}
+
+.btn-open-album i,
+.btn-view-photos i {
+    transition: transform 0.3s ease;
+}
+
+.btn-open-album:hover i,
+.btn-view-photos:hover i {
+    transform: translateX(4px);
+}
+
+/* =================================================================
+   NOVO: GRADE DE FOTOS DENTRO DO ÁLBUM (3 POR COLUNA & FOTOS CERTINHAS)
+   ================================================================= */
+#viewAlbumGrid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important; /* Exatamente 3 por linha */
+    gap: 1.5rem !important;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+/* Card das Fotos do Visualizador */
+.gallery-photo-card {
+    background: #0c132c !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.gallery-photo-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Fotos Alinhadas com Aspect Ratio Uniforme */
+.gallery-photo-card img {
+    width: 100% !important;
+    height: 180px !important;
+    object-fit: cover !important;
+    aspect-ratio: 4/3 !important;
+}
+
+/* Corpo do Card da Foto */
+.gallery-photo-card-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.gallery-photo-card-body p {
+    font-size: 0.85rem;
+    color: #cbd5e1 !important;
+    font-style: italic;
+    line-height: 1.4;
+    margin: 0;
+    flex: 1;
+}
+
+.gallery-photo-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 8px;
+    margin-top: 6px;
+}
+
+.gallery-photo-card-footer span {
+    font-size: 0.75rem;
+    color: #94a3b8 !important;
+    font-weight: 600;
+}
+
+/* Badge de Quantidade de Fotos no Álbum */
+.photos-count-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(12, 19, 44, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    backdrop-filter: blur(4px);
+}
+
+/* =================================================================
+   ESTILOS COMPLETOS DO MODAL GLASSMORPHISM (Centralização e Layout)
+   ================================================================= */
+.ev-modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(5, 8, 20, 0.75) !important; /* Escuro translúcido */
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    display: none; /* Controlado pelo JS */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999 !important;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+}
+
+.ev-modal-overlay.active {
+    opacity: 1;
+}
+
+.ev-modal-container {
+    background: #ffffff !important;
+    border-radius: 24px !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    position: relative;
+    width: 95%;
+    max-width: 1000px;
+    max-height: 85vh;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.ev-modal-overlay.active .ev-modal-container {
+    transform: scale(1);
+}
+
+.ev-modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #f1f5f9;
+    border: none;
+    color: #64748b;
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.ev-modal-close-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+    transform: rotate(90deg);
+}
+
+/* Divisão em duas colunas no upload */
+.ev-modal-content-wrapper {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 30px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.ev-modal-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
+.ev-modal-right {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
+/* Terceiro card da sidebar (Cyan) */
+.card-cyan-glow {
+    border: 1px solid rgba(0, 240, 255, 0.3) !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.08) !important;
+}
+
+.card-cyan-glow .stat-card-icon {
+    background-color: rgba(0, 240, 255, 0.1) !important;
+    color: #00f0ff !important;
 }

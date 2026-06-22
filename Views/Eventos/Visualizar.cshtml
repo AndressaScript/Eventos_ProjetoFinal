@@ -1,0 +1,252 @@
+@model IEnumerable<Eventos_ProjetoFinal.Models.Galeria>
+@{
+    var evento = ViewBag.Evento as Eventos_ProjetoFinal.Models.Eventos;
+    ViewData["Title"] = $"Fotos - {evento?.NomeEvento}";
+    bool isAdmin = Context.Session.GetString("Role") == "Admin";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/padrao.css" />
+    <link rel="stylesheet" href="~/css/header.css" />
+    <link rel="stylesheet" href="~/css/aside.css" />
+    <link rel="stylesheet" href="~/css/listaEventos.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
+
+@if (isAdmin)
+{
+    <!-- =================================================================
+         INTERFACE DO ADMINISTRADOR
+         ================================================================= -->
+    <header class="admin-topbar-new">
+        <div class="logo-senai-admin">
+            <a asp-controller="Home" asp-action="Index">
+                <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="logo-img">
+            </a>
+        </div>
+        <div class="admin-profile-new">
+            <div class="profile-avatar"><i class="fa-solid fa-circle-user"></i></div>
+            <span class="profile-name">Admin</span>
+        </div>
+    </header>
+
+    <div class="admin-dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar-new">
+            <nav class="menu-new">
+                <a asp-controller="Eventos" asp-action="Index" class="menu-item-new">
+                    <i class="fa-solid fa-table-cells-large"></i> Visão Geral
+                </a>
+                <a asp-controller="Eventos" asp-action="Cadastrar" class="menu-item-new">
+                    <i class="fa-solid fa-calendar-plus"></i> Cadastrar Evento
+                </a>
+                <a asp-controller="Eventos" asp-action="Galeria" class="menu-item-new active pink-active">
+                    <i class="fa-regular fa-image"></i> Galeria de Eventos
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main-content">
+            <div class="content-header-new">
+                <div class="breadcrumb-new">
+                    Início > Galeria de Eventos > <span style="color: #0052ff; font-weight: bold;">@evento?.NomeEvento</span>
+                </div>
+                <div class="title-row-new">
+                    <div class="title-block-new">
+                        <h1 class="admin-page-title">@evento?.NomeEvento</h1>
+                        <span class="title-gradient-line"></span>
+                    </div>
+                    <a asp-controller="Eventos" asp-action="Galeria" class="btn-new-event-glow"><i class="fa-solid fa-arrow-left"></i> Voltar à Galeria</a>
+                </div>
+                <p class="admin-subtitle">Realizado em: @evento?.DataEvento.ToString("dd/MM/yyyy") | Palestrante: @evento?.NomePalestrante</p>
+            </div>
+
+            <!-- Grade de Fotos do Evento (Exatamente 3 por linha) -->
+            <div id="viewAlbumGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem;">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var foto in Model)
+                    {
+                        var authorName = foto.Usuario?.Email.Split('@')[0] ?? "Organização";
+                        var isOrganizador = foto.Usuario?.Email.Contains("admin", StringComparison.OrdinalIgnoreCase) ?? true;
+
+                        <div class="gallery-photo-card">
+                            <div style="width: 100%; height: 200px; overflow: hidden; position: relative;">
+                                <img src="@foto.CaminhoImagem" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;" />
+                            </div>
+                            <div class="gallery-photo-card-body" style="padding: 15px; background: #0c132c;">
+                                <p style="color: #cbd5e1; font-style: italic; font-size: 0.88rem; min-height: 40px; margin: 0 0 10px 0;">
+                                    "@foto.Legenda"
+                                </p>
+                                <div class="gallery-photo-card-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                                    <span style="font-size: 0.75rem; color: #94a3b8;">Por: @authorName</span>
+                                    @if (isOrganizador)
+                                    {
+                                        <span style="background: rgba(139, 92, 246, 0.15); color: #c084fc; font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 50px;">Organização</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="background: rgba(0, 82, 255, 0.15); color: #60a5fa; font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 50px;">Aluno</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 5rem 0;">
+                        <i class="fa-regular fa-folder-open" style="font-size: 4rem; margin-bottom: 1rem; display: block; color: #64748b;"></i>
+                        <p style="font-size: 1.2rem; font-weight: 700; color: #ffffff;">Nenhuma foto neste álbum ainda.</p>
+                        <a asp-controller="Eventos" asp-action="Galeria" style="color: #d946ef; text-decoration: underline; font-size: 0.95rem;">Clique aqui para adicionar a primeira foto!</a>
+                    </div>
+                }
+            </div>
+
+            <div class="admin-actions-footer" style="margin-top: 2.5rem;">
+                <a asp-controller="Eventos" asp-action="Galeria" class="btn-admin-back"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            </div>
+        </main>
+    </div>
+}
+else
+{
+    <!-- =================================================================
+         INTERFACE DO ALUNO / PORTAL PÚBLICO
+         ================================================================= -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-container">
+                <a asp-controller="Home" asp-action="Index">
+                    <img class="logo-senai" src="~/img/Senai_logo_footer.png" alt="Logo SENAI">
+                </a>
+            </div>
+            <nav class="nav-menu">
+                <a href="/Home#eventos">Eventos</a>
+                <a href="/Home#sobre">Sobre o Centro</a>
+                <a href="/Home#impactos">Impactos</a>
+                <a href="/Home#galeria" class="active">Galeria</a>
+                <a href="/Home#contato">Contato</a>
+            </nav>
+            <div class="header-actions">
+                @if (Context.Session.GetString("UsuarioId") != null)
+                {
+                    <span class="user-email">@Context.Session.GetString("Email")</span>
+                    <a asp-controller="Login" asp-action="Logout" class="btn-logout" title="Sair"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+                }
+                else
+                {
+                    <a asp-controller="Login" asp-action="Index" class="btn-login" title="Login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                }
+                <a href="/Home#eventos" class="btn-agenda-header"><i class="fa-regular fa-calendar-days"></i> Agenda de Eventos</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="public-gallery-main" style="padding-top: 130px; padding-bottom: 100px; background-color: #050814; min-height: 100vh;">
+        <div class="public-gallery-container" style="max-width: 1300px; margin: 0 auto; padding: 0 2rem; display: flex; flex-direction: column; gap: 2.5rem;">
+           
+            <div class="content-header-new">
+                <div class="breadcrumb-new">
+                    Início > Galeria > <span style="color: #d946ef; font-weight: bold;">@evento?.NomeEvento</span>
+                </div>
+                <div class="title-row-new" style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div class="title-block-new">
+                        <h1 class="admin-page-title" style="color: white;">@evento?.NomeEvento</h1>
+                        <span class="title-gradient-line" style="background: linear-gradient(90deg, #0052ff 0%, #d946ef 100%); width: 120px;"></span>
+                    </div>
+                    <a asp-controller="Eventos" asp-action="Galeria" class="btn-new-event-glow"><i class="fa-solid fa-arrow-left"></i> Voltar à Galeria</a>
+                </div>
+                <p class="admin-subtitle">Realizado em: @evento?.DataEvento.ToString("dd/MM/yyyy") | Palestrante: @evento?.NomePalestrante</p>
+            </div>
+
+            <!-- Grade de Fotos do Evento (Exatamente 3 por linha) -->
+            <div id="viewAlbumGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var foto in Model)
+                    {
+                        var authorName = foto.Usuario?.Email.Split('@')[0] ?? "Organização";
+                        var isOrganizador = foto.Usuario?.Email.Contains("admin", StringComparison.OrdinalIgnoreCase) ?? true;
+
+                        <div class="gallery-photo-card">
+                            <div style="width: 100%; height: 200px; overflow: hidden; position: relative;">
+                                <img src="@foto.CaminhoImagem" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;" />
+                            </div>
+                            <div class="gallery-photo-card-body" style="padding: 15px; background: #0c132c;">
+                                <p style="color: #cbd5e1; font-style: italic; font-size: 0.88rem; min-height: 40px; margin: 0 0 10px 0;">
+                                    "@foto.Legenda"
+                                </p>
+                                <div class="gallery-photo-card-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                                    <span style="font-size: 0.75rem; color: #94a3b8;">Por: @authorName</span>
+                                    @if (isOrganizador)
+                                    {
+                                        <span style="background: rgba(139, 92, 246, 0.15); color: #c084fc; font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 50px;">Organização</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="background: rgba(0, 82, 255, 0.15); color: #60a5fa; font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 50px;">Aluno</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 5rem 0;">
+                        <i class="fa-regular fa-folder-open" style="font-size: 4rem; margin-bottom: 1rem; display: block; color: #64748b;"></i>
+                        <p style="font-size: 1.2rem; font-weight: 700; color: #ffffff;">Nenhuma foto neste álbum ainda.</p>
+                        <a asp-controller="Eventos" asp-action="Galeria" style="color: #d946ef; text-decoration: underline; font-size: 0.95rem;">Clique aqui para adicionar a primeira foto!</a>
+                    </div>
+                }
+            </div>
+
+            <div class="admin-actions-footer">
+                <a asp-controller="Eventos" asp-action="Galeria" class="btn-admin-back"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+            </div>
+        </div>
+    </main>
+
+    <footer id="contato" class="footer-new">
+        <div class="footer-grid">
+            <div class="footer-col brand-col">
+                <img src="~/img/Senai_logo_footer.png" alt="Logo SENAI" class="footer-logo">
+                <p class="footer-desc">Educando hoje, transformando o amanhã.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>NAVEGAÇÃO</h3>
+                <ul>
+                    <li><a href="/Home#eventos">Eventos</a></li>
+                    <li><a href="/Home#sobre">Sobre o Centro</a></li>
+                    <li><a href="/Home#impactos">Impactos</a></li>
+                    <li><a href="/Home#galeria">Galeria</a></li>
+                    <li><a href="/Home#contato">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>CONTATO</h3>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> (11) 3551-8291</li>
+                    <li><i class="fa-solid fa-envelope"></i> senai@email.com</li>
+                    <li><i class="fa-solid fa-globe"></i> www.aluno.senai.br</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Rua Niterói, 180<br>Centro, São Caetano do Sul - SP<br>CEP: 09510-200</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>LINKS ÚTEIS</h3>
+                <ul>
+                    <li><a href="#">Política de Privacidade</a></li>
+                    <li><a href="#">Perguntas Frequentes</a></li>
+                    <li><a href="#">Centro de Eventos</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+}
