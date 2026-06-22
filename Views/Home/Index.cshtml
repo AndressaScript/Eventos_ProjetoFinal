@@ -4,9 +4,13 @@
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true">
+    <!-- CSS DO CHATBOT INJETADO -->
+    <link rel="stylesheet" href="~/css/chatbot.css" asp-append-version="true">
 }
 @section Scripts {
     <script src="~/js/home.js" asp-append-version="true"></script>
+    <!-- JS DO CHATBOT INJETADO -->
+    <script src="~/js/chatbot.js" asp-append-version="true"></script>
 }
 
 @if (Context.Session.GetString("Role") == "Admin")
@@ -35,10 +39,8 @@
         </div>
     </header>
 
-
     <section class="admin-home-section" style="padding-top: 140px; padding-bottom: 80px; min-height: 100vh;">
         <div class="admin-home-container" style="max-width: 1300px; margin: 0 auto; padding: 0 2rem; width: 100%;">
-           
            
             <div class="admin-welcome-banner">
                 <div class="welcome-left">
@@ -84,10 +86,9 @@
                 </div>
             </div>
 
-            <!-- Grade de Ações Rápidas (Atalhos Premium) -->
+            <!-- Grade de Ações Rápidas -->
             <h2 class="admin-section-title" style="margin-top: 3rem;"><i class="fa-solid fa-gears"></i> Ações Rápidas de Gestão</h2>
             <div class="admin-actions-grid">
-                <!-- Ação 1: Gestão Geral -->
                 <div class="admin-action-card">
                     <div class="action-card-icon icon-blue"><i class="fa-solid fa-table-cells-large"></i></div>
                     <h3>Gestão de Eventos</h3>
@@ -95,7 +96,6 @@
                     <a asp-controller="Eventos" asp-action="Index" class="btn-action-go">Acessar Painel <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
-                <!-- Ação 2: Novo Evento -->
                 <div class="admin-action-card">
                     <div class="action-card-icon icon-purple"><i class="fa-solid fa-calendar-plus"></i></div>
                     <h3>Cadastrar Evento</h3>
@@ -103,7 +103,6 @@
                     <a asp-controller="Eventos" asp-action="Cadastrar" class="btn-action-go">Novo Evento <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
-                <!-- Ação 3: Galeria de Fotos -->
                 <div class="admin-action-card">
                     <div class="action-card-icon icon-pink"><i class="fa-regular fa-images"></i></div>
                     <h3>Gerenciar Galeria</h3>
@@ -111,11 +110,9 @@
                     <a asp-controller="Eventos" asp-action="Galeria" class="btn-action-go">Acessar Galeria <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
-
         </div>
     </section>
 
-    <!-- Footer Administrativo Simplificado -->
     <footer class="footer-new" style="padding: 40px 0; border-top: 1px solid var(--border-glow);">
         <div style="max-width: 1300px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; color: var(--text-light-muted); font-size: 0.9rem;">
             <span>&copy; 2026 Portal de Eventos SENAI - Painel de Controle</span>
@@ -126,7 +123,7 @@
 else
 {
     <!-- =================================================================
-         PORTAL PÚBLICO (ALUNOS E VISITANTES) - O QUE JÁ TEMOS HOJE
+         PORTAL PÚBLICO (ALUNOS E VISITANTES)
          ================================================================= -->
     <!-- Header -->
     <header class="header">
@@ -147,7 +144,7 @@ else
                 @if (Context.Session.GetString("UsuarioId") != null)
                 {
                     <span class="user-email">@Context.Session.GetString("Email")</span>
-                    <a asp-controller="Login" asp-action="Logout" class="btn-logout" title="Sair"><i class="fa-solid fa-right-from-bracket"></i></a>
+                    <a asp-controller="Login" asp-action="Logout" class="btn-logout" title="Sair"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
                 }
                 else
                 {
@@ -173,7 +170,6 @@ else
             </div>
         </div>
 
-        <!-- Hero Highlights (Cards na base) -->
         <div class="hero-highlights">
             <div class="highlight-card">
                 <div class="highlight-icon"><i class="fa-solid fa-laptop-code"></i></div>
@@ -225,7 +221,7 @@ else
             <div class="alert alert-danger" style="max-width: 1300px; margin: 0 auto 20px auto; width: calc(100% - 4rem);">@TempData["Erro"]</div>
         }
 
-        <!-- Estrutura do Carrossel -->
+        <!-- Carrossel de Eventos -->
         <div class="carousel-container-new">
             <button class="carousel-btn prev-btn" id="prevBtn" type="button" disabled>
                 <i class="fa-solid fa-chevron-left"></i>
@@ -243,26 +239,14 @@ else
                                 isInscrito = ((List<int>)ViewBag.InscritosIds).Contains(item.EventoID);
                             }
 
-                            string category = "WORKSHOP";
-                            string cardImage = "card_workshop.png";
-                            string badgeClass = "badge-blue";
-
-                            if (item.NomeEvento.Contains("IoT", StringComparison.OrdinalIgnoreCase))
-                            {
-                                category = "PALESTRA";
-                                cardImage = "card_IOT.png";
-                                badgeClass = "badge-purple";
-                            }
-                            else if (item.NomeEvento.Contains("IA", StringComparison.OrdinalIgnoreCase) ||
-                                     item.NomeEvento.Contains("Inteligência", StringComparison.OrdinalIgnoreCase))
-                            {
-                                category = "PALESTRA";
-                                cardImage = "card_palestra.png";
-                                badgeClass = "badge-pink";
-                            }
+                            string category = item.TipoEvento.ToUpper();
+                            string badgeClass = category == "WORKSHOP" ? "badge-blue" : "badge-purple";
+                           
+                            string defaultImage = category == "WORKSHOP" ? "card_workshop.png" : "card_palestra.png";
+                            if (item.NomeEvento.Contains("IoT", StringComparison.OrdinalIgnoreCase)) defaultImage = "card_IOT.png";
 
                             string imageSrc = string.IsNullOrEmpty(item.ImagemUrl)
-                                ? Url.Content("~/img/" + cardImage)
+                                ? Url.Content("~/img/" + defaultImage)
                                 : item.ImagemUrl;
 
                             <div class="event-card-new carousel-item-new event-card-clickable"
@@ -277,6 +261,7 @@ else
                                  data-imagem="@imageSrc"
                                  data-descricao="@(string.IsNullOrEmpty(item.Descricao) ? "Sem descrição disponível para este evento." : item.Descricao)"
                                  data-inscrito="@(isInscrito ? "true" : "false")"
+                                 data-tipo="@item.TipoEvento"
                                  data-role="@(Context.Session.GetString("Role") ?? "")">
                                
                                 <div class="card-image-wrapper">
@@ -334,7 +319,7 @@ else
         </div>
     </section>
 
-    <!-- Seção Galeria & Estatísticas (Fundo Escuro) -->
+    <!-- Seção Galeria & Estatísticas -->
     <section id="impactos" class="gallery-stats-section">
         <div class="gallery-stats-container">
             <!-- Esquerda: Galeria -->
@@ -389,7 +374,6 @@ else
             </div>
         </div>
 
-        <!-- CTA Banner -->
         <div class="cta-banner">
             <div class="cta-left">
                 <div class="cta-icon"><i class="fa-solid fa-rocket"></i></div>
@@ -441,30 +425,62 @@ else
             </div>
         </div>
     </footer>
+
+    <!-- ==========================================================================
+         WIDGET FLUTUANTE CHATBOT GEMINI NEON (INJETADO AQUI)
+         ========================================================================== -->
+    <!-- Botão Flutuante (Bubble) -->
+    <div class="chatbot-bubble" id="chatbotBubble" title="Tire suas dúvidas!">
+        <i class="fa-regular fa-comments"></i>
+    </div>
+
+    <!-- Janela de Conversa Flutuante -->
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div class="chatbot-header-info">
+                <div class="chatbot-avatar"><i class="fa-solid fa-robot"></i></div>
+                <div class="chatbot-header-text">
+                    <h3>Suporte Paulo Skaf</h3>
+                    <span><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Online</span>
+                </div>
+            </div>
+            <button class="chatbot-close-btn" id="chatbotCloseBtn" type="button">&times;</button>
+        </div>
+       
+        <div class="chatbot-body" id="chatbotBody">
+            <!-- Mensagens inseridas dinamicamente via JS -->
+        </div>
+       
+        <div class="chatbot-footer">
+            <input type="text" id="chatbotInput" placeholder="Digite sua pergunta..." maxlength="200" />
+            <button class="chatbot-send-btn" id="chatbotSendBtn" type="button">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
 }
 
 <!-- NOVO MODAL DE DETALHES GLASSMORPHISM LIGHT/WHITE -->
 <div id="eventModal" class="ev-modal-overlay" style="display: none;">
     <div class="ev-modal-container">
-        <!-- Botão de Fechar X -->
         <button class="ev-modal-close-btn" id="closeModalBtn" type="button">&times;</button>
        
         <div class="ev-modal-content-wrapper">
-            <!-- Lado Esquerdo: Apenas a Imagem Grande -->
+            <!-- Lado Esquerdo -->
             <div class="ev-modal-left">
                 <div class="ev-modal-image-container">
                     <img id="modalEventImage" src="" alt="Imagem do Evento">
                 </div>
             </div>
            
-            <!-- Lado Direito: Título + Destaques Hexagonais + Descrição + Inscrição -->
+            <!-- Lado Direito -->
             <div class="ev-modal-right">
                 <div class="ev-modal-header-row">
                     <h2 class="ev-modal-title" id="modalEventTitle">Título do Evento</h2>
                     <button class="ev-modal-share-btn" type="button"><i class="fa-solid"></i></button>
                 </div>
                
-                <!-- Grid de Destaques Hexagonais (Alinhados como grid de 2 colunas) -->
+                <!-- Grid de Destaques Hexagonais -->
                 <div class="ev-modal-highlights-list">
                     <div class="ev-highlight-item-new">
                         <div class="ev-hex-icon-wrapper">
@@ -501,8 +517,8 @@ else
                             <div class="ev-hex-icon"><i class="fa-solid fa-display"></i></div>
                         </div>
                         <div class="ev-highlight-text-block">
-                            <span class="ev-highlight-label">FORMATO</span>
-                            <span class="ev-highlight-val" id="modalEventFormat">Híbrido (Presencial/Online)</span>
+                            <span class="ev-highlight-label">TIPO DE EVENTO</span>
+                            <span class="ev-highlight-val" id="modalEventFormat">Workshop / Palestra</span>
                         </div>
                     </div>
                 </div>

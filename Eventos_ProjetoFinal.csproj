@@ -14,7 +14,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <!-- Dependências do Chatbot com Gemini -->
+    <PackageReference Include="Mscc.GenerativeAI" Version="3.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
-  
+
+  <!-- Impede que o dotnet watch monitore a pasta de uploads, evitando travamentos no terminal -->
+  <ItemGroup>
+    <Watch Remove="wwwroot/uploads/**/*" />
+  </ItemGroup>
 
 </Project>
