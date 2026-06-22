@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const descricao = card.dataset.descricao;
         const inscrito = card.dataset.inscrito === 'true';
         const role = card.dataset.role;
+        const tipo = card.dataset.tipo; // Novo campo para o tipo de evento
 
         // Povoa modal (Lado Direito)
         modalEventTitle.textContent = nome;
@@ -48,10 +49,16 @@ document.addEventListener('DOMContentLoaded', function () {
         modalEventImage.src = imagem;
         modalEventImage.alt = nome;
        
-        // Povoa os 3 campos principais com os novos IDs
+        // Povoa os campos com os dados exatos do banco
         modalEventDate.textContent = `${dataFormatada} ${horaFormatada}`;
-        modalEventLocal.textContent = `${local} e Transmissão Online`;
+        modalEventLocal.textContent = local; // Removido o sufixo fixo " e Transmissão Online"
         modalEventPalestrante.textContent = palestrante;
+
+        // Atualiza o Tipo de Evento dinamicamente (Workshop ou Palestra)
+        const modalEventFormat = document.getElementById('modalEventFormat');
+        if (modalEventFormat) {
+            modalEventFormat.textContent = tipo;
+        }
 
         // Guarda os IDs no botão do modal
         modalSubscribeBtn.dataset.eventoId = id;
@@ -124,14 +131,13 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // EXIBE O ALERTA solicitado pelo usuário
                 alert("Inscrito com sucesso!");
 
                 // Atualiza visual do Modal imediatamente
                 modalSubscribeBtn.style.display = 'none';
                 modalSubscribedMessage.style.display = 'flex';
 
-                // Atualiza o Card físico na tela de fundo (Fim do Saber mais, bloqueia nova inscrição)
+                // Atualiza o Card físico na tela de fundo
                 if (activeCard) {
                     activeCard.dataset.inscrito = 'true';
                    
@@ -158,9 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ==========================================================
     // 3. LÓGICA DO CARROSSEL DE PRÓXIMOS EVENTOS (RESPONSIVO)
-    // ==========================================================
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');

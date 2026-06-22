@@ -82,6 +82,7 @@
 .input-field-group input[type="text"],
 .input-field-group input[type="number"],
 .input-field-group input[type="date"],
+.input-field-group input[type="time"],
 .input-field-group input[type="datetime-local"],
 .input-field-group textarea,
 .select-wrapper select {
@@ -325,7 +326,7 @@
 }
 
 .menu-item-new i {
-    color: #64748b; 
+    color: #64748b;
     transition: all 0.3s ease;
 }
 
@@ -335,7 +336,7 @@
 }
 
 .menu-item-new.active {
-    background-color: rgba(217, 70, 239, 0.1) !important; 
+    background-color: rgba(217, 70, 239, 0.1) !important;
     color: #d946ef !important; /* Roxo neon */
     font-weight: 600;
 }
@@ -351,6 +352,7 @@
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
 input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     opacity: 0;
     cursor: pointer;
@@ -410,14 +412,14 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 /* Cards de Informação na Sidebar */
 .sidebar-cards-section {
     padding: 20px;
-    margin-top: auto; 
+    margin-top: auto;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
 .info-card-new {
-    background-color: #0b132c; 
+    background-color: #0b132c;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
     padding: 15px;

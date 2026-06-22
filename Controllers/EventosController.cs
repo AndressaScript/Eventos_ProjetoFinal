@@ -29,7 +29,7 @@ namespace Eventos_ProjetoFinal.Controllers
         {
             var action = context.RouteData.Values["action"]?.ToString();
             var role = HttpContext.Session.GetString("Role");
-            
+           
             if (action == "Galeria" || action == "UploadFotos" || action == "Visualizar")
             {
                 if (role != "Admin" && role != "Aluno")
@@ -76,14 +76,53 @@ namespace Eventos_ProjetoFinal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Cadastrar(Eventos novoEvento)
+        public async Task<IActionResult> Cadastrar(Eventos novoEvento, IFormFile? imagemArquivo, string horaInput)
         {
             ModelState.Remove("AdminID");
+            ModelState.Remove("HorarioEvento"); // Validação manual no servidor
+
+            // Combina DataEvento (DateOnly) com horaInput (TimeOnly) para formar o HorarioEvento (DateTime)
+            if (TimeOnly.TryParse(horaInput, out TimeOnly time))
+            {
+                novoEvento.HorarioEvento = novoEvento.DataEvento.ToDateTime(time);
+            }
+            else
+            {
+                ModelState.AddModelError("HorarioEvento", "Horário de início inválido.");
+            }
+
             if (ModelState.IsValid)
             {
                 if (int.TryParse(HttpContext.Session.GetString("UsuarioId"), out int adminId))
                 {
                     novoEvento.AdminID = adminId;
+
+                    // Salva a imagem do banner do evento se tiver sido enviada
+                    if (imagemArquivo != null && imagemArquivo.Length > 0)
+                    {
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "eventos");
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        var ext = Path.GetExtension(imagemArquivo.FileName).ToLower();
+                        var uniqueFileName = Guid.NewGuid().ToString() + ext;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imagemArquivo.CopyToAsync(stream);
+                        }
+
+                        novoEvento.ImagemUrl = "/uploads/eventos/" + uniqueFileName;
+                    }
+                    else
+                    {
+                        // Imagem padrão caso o admin não envie nenhuma
+                        novoEvento.ImagemUrl = "/img/card_workshop.png";
+                    }
+
                     await _service.Criar(novoEvento);
                     return RedirectToAction("Index");
                 }
@@ -98,20 +137,63 @@ namespace Eventos_ProjetoFinal.Controllers
         {
             var evento = await _service.BuscarPorId(id);
             if (evento == null) return NotFound();
-            
+           
             await CarregarEstatisticasSidebar();
             return View(evento);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Editar(Eventos evento)
+        public async Task<IActionResult> Editar(Eventos evento, IFormFile? imagemArquivo, string horaInput)
         {
              ModelState.Remove("AdminID");
+             ModelState.Remove("HorarioEvento"); // Validação manual no servidor
+
+             // Combina DataEvento (DateOnly) com horaInput (TimeOnly) para formar o HorarioEvento (DateTime)
+             if (TimeOnly.TryParse(horaInput, out TimeOnly time))
+             {
+                 evento.HorarioEvento = evento.DataEvento.ToDateTime(time);
+             }
+             else
+             {
+                 ModelState.AddModelError("HorarioEvento", "Horário de início inválido.");
+             }
+
              if (ModelState.IsValid)
              {
                   if (int.TryParse(HttpContext.Session.GetString("UsuarioId"), out int adminId))
                   {
                       evento.AdminID = adminId;
+
+                      // Salva a nova imagem do banner se tiver sido enviada
+                      if (imagemArquivo != null && imagemArquivo.Length > 0)
+                      {
+                          var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "eventos");
+                          if (!Directory.Exists(uploadsFolder))
+                          {
+                              Directory.CreateDirectory(uploadsFolder);
+                          }
+
+                          var ext = Path.GetExtension(imagemArquivo.FileName).ToLower();
+                          var uniqueFileName = Guid.NewGuid().ToString() + ext;
+                          var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                          using (var stream = new FileStream(filePath, FileMode.Create))
+                          {
+                              await imagemArquivo.CopyToAsync(stream);
+                          }
+
+                          evento.ImagemUrl = "/uploads/eventos/" + uniqueFileName;
+                      }
+                      else
+                      {
+                          // Se não enviou imagem nova, preserva a imagem existente no banco
+                          var eventoExistente = await _context.Eventos.AsNoTracking().FirstOrDefaultAsync(e => e.EventoID == evento.EventoID);
+                          if (eventoExistente != null)
+                          {
+                              evento.ImagemUrl = eventoExistente.ImagemUrl;
+                          }
+                      }
+
                       await _service.Atualizar(evento);
                       return RedirectToAction("Index");
                   }
@@ -128,12 +210,12 @@ namespace Eventos_ProjetoFinal.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Exibe a Galeria de Eventos (Mais leve, não carrega fotos aqui!)
+        // GET: Exibe a Galeria de Eventos
         public async Task<IActionResult> Galeria()
         {
             var hoje = DateOnly.FromDateTime(DateTime.Today);
             var listaDeEventos = await _service.ListarTodos();
-            
+           
             var eventosPassados = listaDeEventos
                 .Where(e => e.DataEvento <= hoje)
                 .OrderByDescending(e => e.DataEvento)
@@ -162,21 +244,18 @@ namespace Eventos_ProjetoFinal.Controllers
 
             ViewBag.EventosDisponiveis = eventosDisponiveisParaUpload;
 
-            // Busca as fotos apenas para contar a quantidade em cada álbum de forma leve
             var contagemFotos = await _context.Galeria
                 .GroupBy(g => g.EventoID)
                 .Select(g => new { EventoID = g.Key, Count = g.Count() })
                 .ToDictionaryAsync(x => x.EventoID, x => x.Count);
 
             ViewBag.ContagemFotos = contagemFotos;
-
-            // Estatística rápida de álbuns criados
             ViewBag.QtdAlbuns = contagemFotos.Count(x => x.Value > 0);
 
             return View(eventosPassados);
         }
 
-        // GET: Nova Página Dedicada para ver as fotos de um Evento Específico
+        // GET: Nova Página Dedicada para ver as fotos
         [HttpGet]
         public async Task<IActionResult> Visualizar(int id)
         {
